@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: friend-cards-server
+    env: node
+    region: singapore   # closest to India
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: NTFY_TOPIC
+        value: ayushman-secret-cards-x7k2
+      - key: DESTROY_KEY
+        value: dev-unlock-2025
+      - key: NODE_ENV
+        value: production
+      # Add YOUR_PHONE and CALLMEBOT_APIKEY here if using WhatsApp later

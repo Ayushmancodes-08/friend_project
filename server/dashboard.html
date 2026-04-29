@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📊 Card Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0d0d14;
+      color: #e0d8f0;
+      min-height: 100vh;
+      padding: 32px 20px;
+    }
+    h1 { font-size: 1.5rem; color: #c97b84; margin-bottom: 6px; }
+    .sub { font-size: 0.8rem; color: #6b5f75; margin-bottom: 32px; }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 18px;
+    }
+    .card h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: #7a6e80; margin-bottom: 12px; }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .alive { background: rgba(100,200,130,0.15); color: #6dc87c; border: 1px solid rgba(100,200,130,0.3); }
+    .dead  { background: rgba(220,80,80,0.15); color: #e07070; border: 1px solid rgba(220,80,80,0.3); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    .dot.pulse { animation: pulse 1.2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .card-progress { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+    .card-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px; border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid transparent;
+      font-size: 0.9rem; color: #8a7a90; transition: all 0.3s;
+    }
+    .card-row.current {
+      border-color: rgba(200,130,140,0.4);
+      background: rgba(200,130,140,0.1);
+      color: #f0c8d0;
+    }
+    .card-row.done { color: #5a6b60; text-decoration: line-through; }
+    .indicator { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.1); flex-shrink: 0; }
+    .indicator.current { background: #c97b84; animation: pulse 1.2s ease-in-out infinite; }
+    .indicator.done { background: #4a7a55; }
+    .log { max-height: 160px; overflow-y: auto; font-size: 0.82rem; color: #6b5f75; line-height: 1.8; }
+    .log span { display: block; }
+    .log .time { color: #4a4055; font-size: 0.75rem; }
+    .reset-section { margin-top: 24px; }
+    .reset-section input {
+      width: 100%; padding: 12px 16px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3);
+      color: #e0d8f0; font-size: 0.95rem; outline: none; margin-bottom: 10px;
+    }
+    .reset-btn {
+      width: 100%; padding: 13px; border-radius: 12px; border: none;
+      background: linear-gradient(135deg, #c97b84, #9b68a0);
+      color: #fff; font-size: 1rem; font-weight: bold; cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .reset-btn:hover { opacity: 0.85; }
+    #msg { margin-top: 10px; font-size: 0.85rem; text-align: center; min-height: 20px; }
+    .ok { color: #6dc87c; }
+    .err { color: #e07070; }
+  </style>
+</head>
+<body>
+  <h1>📊 Live Card Tracker</h1>
+  <p class="sub">Private dashboard — do not share this URL.</p>
+
+  <div class="card">
+    <h2>App Status</h2>
+    <div id="status-pill" class="status-pill alive">
+      <span class="dot pulse"></span>
+      <span id="status-text">Checking…</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Card Progress</h2>
+    <div class="card-progress" id="progress"></div>
+  </div>
+
+  <div class="card">
+    <h2>Event Log</h2>
+    <div class="log" id="log"><span style="color:#3a3045">No events yet…</span></div>
+  </div>
+
+  <div class="reset-section card">
+    <h2>Developer Reset</h2>
+    <input type="password" id="key-input" placeholder="Enter secret developer key…">
+    <button class="reset-btn" onclick="doReset()">🔓 Unlock & Reset App</button>
+    <div id="msg"></div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const cardNames = [
+      "Card 1 — Don't misunderstand me",
+      "Card 2 — Remember how we used to talk?",
+      "Card 3 — Ever since the BBSR incident…",
+      "Card 4 — But I totally understand",
+      "Card 5 — Bye!!",
+      "Card 6 — Reply Card"
+    ];
+
+    let currentCard = -1;
+    let destroyed = false;
+
+    function buildProgress(active) {
+      const el = document.getElementById('progress');
+      el.innerHTML = cardNames.map((name, i) => {
+        let cls = '';
+        if (i === active) cls = 'current';
+        else if (i < active) cls = 'done';
+        const indCls = cls ? `indicator ${cls}` : 'indicator';
+        return `<div class="card-row ${cls}"><span class="${indCls}"></span>${name}</div>`;
+      }).join('');
+    }
+
+    function updateStatus(isDestroyed) {
+      destroyed = isDestroyed;
+      const pill = document.getElementById('status-pill');
+      const txt = document.getElementById('status-text');
+      pill.className = 'status-pill ' + (isDestroyed ? 'dead' : 'alive');
+      pill.querySelector('.dot').className = 'dot' + (isDestroyed ? '' : ' pulse');
+      txt.textContent = isDestroyed ? '💀 DESTROYED — App is dead' : '✅ Active — App is live';
+    }
+
+    function addLog(msg) {
+      const log = document.getElementById('log');
+      const t = new Date().toLocaleTimeString();
+      log.innerHTML = `<span><span class="time">[${t}]</span> ${msg}</span>` + log.innerHTML;
+    }
+
+    const socket = io();
+
+    socket.on('state_sync', (state) => {
+      updateStatus(state.destroyed);
+      buildProgress(state.lastCard);
+      currentCard = state.lastCard;
+    });
+
+    socket.on('session_open', (d) => {
+      addLog('👁️ <strong>She opened the page!</strong>');
+    });
+
+    socket.on('card_view', (d) => {
+      currentCard = d.index;
+      buildProgress(currentCard);
+      addLog(`📖 Now on: <strong>${d.name}</strong>`);
+    });
+
+    socket.on('destroyed', (d) => {
+      updateStatus(true);
+      if (d.replied) {
+        addLog(`💬 She replied: <em>"${d.message}"</em> — App destroyed.`);
+      } else {
+        addLog('🔇 She passed without replying — App destroyed.');
+      }
+    });
+
+    socket.on('reset', () => {
+      updateStatus(false);
+      buildProgress(-1);
+      addLog('🔓 App reset by developer.');
+    });
+
+    // Init
+    buildProgress(-1);
+
+    async function doReset() {
+      const key = document.getElementById('key-input').value;
+      const msg = document.getElementById('msg');
+      try {
+        const r = await fetch('/api/reset', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key })
+        });
+        const data = await r.json();
+        if (data.ok) {
+          msg.className = 'ok';
+          msg.textContent = '✅ App successfully unlocked and reset!';
+        } else {
+          msg.className = 'err';
+          msg.textContent = '❌ ' + (data.error || 'Failed');
+        }
+      } catch (e) {
+        msg.className = 'err';
+        msg.textContent = '❌ Network error';
+      }
+    }
+  </script>
+</body>
+</html>

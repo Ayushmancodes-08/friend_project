@@ -1,0 +1,409 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --c1: #f9e8d9;
+    --c2: #fde8f0;
+    --c3: #e8f0fd;
+    --c4: #e8fdf0;
+    --c5: #fdf4e8;
+    --c6: #f0e8fd;
+    --accent: #c97b84;
+    --ink: #3a2a35;
+    --soft: #7a6a75;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: #1a0f14;
+    font-family: 'Lora', Georgia, serif;
+    touch-action: none;
+    user-select: none;
+}
+
+/* Ambient background */
+.bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(ellipse at 30% 20%, #2d1a2a 0%, #0f0a0d 60%),
+        radial-gradient(ellipse at 80% 80%, #1e1228 0%, transparent 60%);
+}
+
+.bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.4;
+}
+
+/* Floating petals */
+.petals {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.petal {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 0 50% 50% 50%;
+    opacity: 0;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-20px) rotate(0deg) scale(1);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.6;
+    }
+
+    90% {
+        opacity: 0.3;
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(720deg) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    padding: 18px 24px 10px;
+    text-align: center;
+    background: linear-gradient(to bottom, rgba(26, 15, 20, 0.95) 70%, transparent);
+}
+
+.header h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
+    color: #f0d8e8;
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 20px rgba(200, 120, 130, 0.4);
+}
+
+.header p {
+    font-family: 'Lora', serif;
+    font-size: 0.7rem;
+    color: #9a8a95;
+    margin-top: 3px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* Counter */
+.counter-dots {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+}
+
+.dot.active {
+    background: #e8b4c0;
+    width: 22px;
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(232, 180, 192, 0.6);
+}
+
+/* Hint */
+.hint {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    font-family: 'Lora', serif;
+    font-size: 0.65rem;
+    color: rgba(200, 170, 180, 0.6);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    animation: pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 0.5
+    }
+
+    50% {
+        opacity: 1
+    }
+}
+
+.hint svg {
+    width: 14px;
+}
+
+/* Card stack */
+.stack {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    padding: 90px 0 100px;
+    padding-left: 40px;
+}
+
+.card-wrapper {
+    position: absolute;
+    width: min(88vw, 340px);
+    transition: transform 0.4s cubic-bezier(0.34, 1.3, 0.64, 1), opacity 0.4s ease;
+    cursor: grab;
+    touch-action: none;
+}
+
+.card-wrapper:active {
+    cursor: grabbing;
+}
+
+.card {
+    width: 100%;
+    height: 440px; /* Use fixed height that fits all text easily but doesn't overlap screens */
+    max-height: calc(100dvh - 160px);
+    border-radius: 28px;
+    padding: 28px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 4px 10px rgba(0, 0, 0, 0.3),
+        0 15px 35px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Watercolor texture overlay */
+.card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='4'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Decorative corner flourish */
+.card::after {
+    content: '✦';
+    position: absolute;
+    bottom: 18px;
+    right: 22px;
+    font-size: 0.75rem;
+    opacity: 0.3;
+    color: var(--ink);
+}
+
+.card>* {
+    position: relative;
+    z-index: 1;
+}
+
+/* Card themes */
+.card-1 { background: linear-gradient(145deg, #fef4ec 0%, #fde8e8 50%, #f9e0f0 100%); }
+.card-2 { background: linear-gradient(145deg, #eef4fe 0%, #e8eeff 50%, #f4eeff 100%); }
+.card-3 { background: linear-gradient(145deg, #f0fdf4 0%, #e8f8f0 50%, #eefaf5 100%); }
+.card-4 { background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 50%, #fdf0e0 100%); }
+.card-5 { background: linear-gradient(145deg, #fdf4ff 0%, #f5e8ff 50%, #ede8ff 100%); }
+
+.card-label {
+    font-family: 'Dancing Script', cursive;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.2;
+}
+
+.card-emoji {
+    font-size: 2.4rem;
+    margin-bottom: 18px;
+    display: block;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+}
+
+.card-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.3rem, 4.5vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    color: var(--ink);
+}
+
+.card-body {
+    font-family: 'Lora', serif;
+    font-size: clamp(0.9rem, 3.2vw, 1rem);
+    line-height: 1.6;
+    color: var(--soft);
+    flex: 1;
+    font-style: italic;
+    overflow-y: auto;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+    -ms-overflow-style: none;  /* Hide scrollbar IE/Edge */
+}
+
+.card-body::-webkit-scrollbar {
+    display: none; /* Hide scrollbar Chrome/Safari */
+}
+
+.card-sig {
+    margin-top: 24px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.15rem;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+}
+
+/* Swipe feedback overlay */
+.swipe-left-indicator {
+    position: absolute;
+    top: 30px;
+    right: 20px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.1rem;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 10;
+    pointer-events: none;
+    background: rgba(220, 80, 80, 0.15);
+    border: 1.5px solid rgba(220, 80, 80, 0.5);
+    color: #e06060;
+    transform: rotate(8deg);
+}
+
+/* Dragging state */
+.card-wrapper.dragging {
+    transition: none !important;
+}
+
+/* Dismiss animation */
+.card-wrapper.fly-left {
+    transition: transform 0.5s cubic-bezier(0.55, 0.06, 0.68, 0.19), opacity 0.4s ease !important;
+    transform: translateX(-150vw) rotate(-30deg) !important;
+    opacity: 0;
+}
+
+/* All-done screen */
+.done-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, #1e0f18 0%, #0a0608 100%);
+    text-align: center;
+    padding: 40px;
+}
+
+.done-screen.show {
+    display: flex;
+    animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.96)
+    }
+    to {
+        opacity: 1;
+        transform: scale(1)
+    }
+}
+
+.done-screen .big-emoji {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.done-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    color: #f0d8e8;
+    margin-bottom: 12px;
+}
+
+.done-screen p {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: #9a8a95;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.restart-btn {
+    margin-top: 32px;
+    padding: 14px 32px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(200, 150, 170, 0.4);
+    background: rgba(200, 120, 140, 0.1);
+    color: #e8b4c0;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.1rem;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.3s;
+}
+
+.restart-btn:hover {
+    background: rgba(200, 120, 140, 0.2);
+    transform: scale(1.04);
+}

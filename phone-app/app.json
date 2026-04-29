@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "Card Tracker",
+    "slug": "card-tracker",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#0d0a0e"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0d0a0e"
+      },
+      "package": "com.ayushman.cardtracker"
+    },
+    "ios": {
+      "bundleIdentifier": "com.ayushman.cardtracker"
+    }
+  }
+}
