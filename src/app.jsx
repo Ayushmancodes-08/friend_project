@@ -188,7 +188,8 @@ export function App() {
       },
       body: JSON.stringify({
         subject: "Reply from your swipeable card!",
-        message: replyText
+        message: replyText,
+        _url: "https://friend-project-pink.vercel.app/"
       })
     }).catch(err => console.error("Error sending email:", err));
 

@@ -120,7 +120,7 @@ app.post('/api/open', async (req, res) => {
   if (isFirst) {
     await notifyAll(
       '👀 She opened your cards!',
-      'Someone just opened your swipeable card message. Watch the dashboard for live updates.',
+      'Your friend accessed the site: https://friend-project-pink.vercel.app/ - Watch the dashboard for live updates.',
       5
     );
   }
