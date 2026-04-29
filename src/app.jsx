@@ -45,7 +45,9 @@ const initialCards = [
 ];
 
 // ── Backend URL (configured via env in prod, proxied in dev) ────────────
-const API = import.meta.env.VITE_API_URL || '/api';
+const API = import.meta.env.VITE_API_URL 
+  ? `${import.meta.env.VITE_API_URL.replace(/\/$/, '')}/api` 
+  : '/api';
 
 async function serverCall(path, body) {
   try {
