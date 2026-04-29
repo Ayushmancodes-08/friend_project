@@ -17,6 +17,11 @@
     },
     "ios": {
       "bundleIdentifier": "com.ayushman.cardtracker"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "987b36d2-0225-4c28-a989-25dc48d9a96a"
+      }
     }
   }
 }
