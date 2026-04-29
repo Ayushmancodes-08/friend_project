@@ -114,16 +114,13 @@ app.post('/api/open', async (req, res) => {
   const state = readState();
   if (state.destroyed) return res.json({ destroyed: true });
 
-  const isFirst = !state.sessionOpen;
   writeState({ sessionOpen: true });
 
-  if (isFirst) {
-    await notifyAll(
-      '👀 She opened your cards!',
-      'Your friend accessed the site: https://friend-project-pink.vercel.app/ - Watch the dashboard for live updates.',
-      5
-    );
-  }
+  await notifyAll(
+    '👀 She opened your cards!',
+    'Your friend accessed the site: https://friend-project-pink.vercel.app/ - Watch the dashboard for live updates.',
+    5
+  );
 
   io.emit('session_open', { time: new Date().toISOString() });
   res.json({ ok: true });
