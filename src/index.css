@@ -201,7 +201,7 @@ body {
 
 .card {
     width: 100%;
-    height: 440px; /* Use fixed height that fits all text easily but doesn't overlap screens */
+    height: 500px; /* Increased from 440px to fit longer text */
     max-height: calc(100dvh - 160px);
     border-radius: 28px;
     padding: 28px 24px 28px;
