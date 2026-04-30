@@ -22,7 +22,7 @@ const initialCards = [
     label: "Being honest",
     emoji: "😔",
     title: "Ever since the BBSR incident...",
-    body: "After the BBSR incident, the daily calls just stopped. It honestly feels like 'no daily calls' turned into 'no calls ever.' Whenever we do talk, you seem irritated, telling me to speak fast or that you have work, and you didn't realize you were being rude 😒😒. I respect your time so I won't force calls. But my overthinking sucks—it makes me feel like you hate talking to me, or maybe you found another gossip buddy 🤷‍♂️",
+    body: "after the bbsr thing, You changed so much making me scared or maybe I changed a bit making me feel that you changed. Idk that",
     sig: "Just being real with you 🌿",
     theme: "card-3"
   },
@@ -38,7 +38,7 @@ const initialCards = [
     label: "Moving forward",
     emoji: "🏃",
     title: "Bye!",
-    body: "Anyway, that's what was on my mind! Tataaa. But you seriously need to meet me soon!",
+    body: "Anyway, that's what was on my mind! Tataaa. But you seriously need to buy me a ice cream",
     sig: "See you soon! 👋",
     theme: "card-5"
   }
