@@ -212,10 +212,8 @@ export function App() {
     setReplySent(false);
   };
 
-  // Calculate card stacking styles
   const getCardStyle = (index) => {
     if (index < current) {
-      // Already dismissed
       return {
         transform: 'translate3d(-150vw, 0, 0) rotate(-30deg)',
         opacity: 0,
@@ -224,7 +222,7 @@ export function App() {
     }
 
     if (index === current) {
-      // Active card
+
       return {
         transform: `translate3d(${offsetX}px, ${offsetY * 0.2}px, 0) rotate(${offsetX * 0.05}deg)`,
         opacity: 1,
@@ -256,12 +254,10 @@ export function App() {
 
   return (
     <>
-      {/* Destroyed state — permanent dead screen */}
       {isDestroyed && <DestroyedScreen />}
 
-      {/* Loading state — invisible until we know status */}
       {!statusChecked && <div style={{ position: 'fixed', inset: 0, background: '#0d0a0e', zIndex: 9998 }} />}
-
+    
       <div className="bg"></div>
       <div className="petals">
         {petals.map(p => (
