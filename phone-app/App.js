@@ -11,7 +11,7 @@ import { BACKEND_URL, DESTROY_KEY } from './config';
 const CARDS = [
   { label: "Card 1", desc: "Don't misunderstand me", icon: "👋" },
   { label: "Card 2", desc: "Remember how we used to talk?", icon: "💭" },
-  { label: "Card 3", desc: "Ever since the BBSR incident...", icon: "😔" },
+  { label: "Card 3", desc: "That BBSR thing...", icon: "🥺" },
   { label: "Card 4", desc: "But I totally understand", icon: "🤝" },
   { label: "Card 5", desc: "Bye!!", icon: "🏃" },
   { label: "Reply Card", desc: "Any reply?", icon: "💬" },

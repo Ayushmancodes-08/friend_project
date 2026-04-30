@@ -6,7 +6,7 @@ const initialCards = [
     label: "First off...",
     emoji: "👋",
     title: "Don't misunderstand me",
-    body: "First of all, please don't take this the wrong way! I'm just getting a whole year's worth of thoughts out in one day, so please don't misunderstand. Au kehi jadi padhila na card.. Honestly kahuci katha kharab haba.",
+    body: "First of all, please don't take this the wrong way! I'm just getting a whole year's worth of thoughts out in one day, so please don't misunderstand. Au kehi jadi padhila na card except you.. Honestly kahuci katha kharab haba.",
     sig: "Just hear me out ✉️",
     theme: "card-1"
   },
@@ -14,23 +14,23 @@ const initialCards = [
     label: "Looking back",
     emoji: "💭",
     title: "Remember how we used to talk?",
-    body: "I know you hate reading massive texts and I have so much to tell you, so I thought cards would be a much better way to say it all. Plus, we really need to talk about what happened. We used to gossip so much, like literally all the time! I just want to know what shifted between us.",
+    body: "I know you hate reading massive texts and I have so much to tell you, so I thought cards would be a much better way to say it all. Plus, we really need to talk about your situation and tadaaaaa I'm here for you .",
     sig: "Missing our endless chats 💭",
     theme: "card-2"
   },
   {
-    label: "Being honest",
-    emoji: "😔",
-    title: "Ever since the BBSR incident...",
-    body: "after the bbsr thing, You changed so much making me scared or maybe I changed a bit making me feel that you changed. Idk that",
-    sig: "Just being real with you 🌿",
+    label: "Heart to heart",
+    emoji: "🥺",
+    title: "That BBSR thing...",
+    body: "i'm not trying to be dramatic here .. but after the bbsr thing, you changed so much making me scared but accha hai ki meri dost zinda hai!",
+    sig: "Glad you're safe though 🫂",
     theme: "card-3"
   },
   {
     label: "I get it",
     emoji: "🤝",
     title: "But I totally understand",
-    body: "But it's totally okay, I get that you might have exams, personal issues, or you're just busy. I'm not holding anything against you, I understand that life gets chaotic.",
+    body: "But it's totally okay, I get that you might have exams, personal issues, or you're just busy. I'm not holding anything for you, I understand that life gets chaotic sometimes.",
     sig: "Still got your back ✨",
     theme: "card-4"
   },
@@ -38,7 +38,7 @@ const initialCards = [
     label: "Moving forward",
     emoji: "🏃",
     title: "Bye!",
-    body: "Anyway, that's what was on my mind! Tataaa. But you seriously need to buy me a ice cream",
+    body: <>Anyway, that's what was on my mind! Tataaa. But you seriously need to buy me an Ice-cream. And yes, mujhe aapka best friend banke Sai ki jagah lene ka koi interest nhi hai but still Bro I'm there. Kabhi kabhi viva ya exam ke liye busy hojaunga but I'm here!!! At least for some more 2 years.<br /><br /><b>TRUST THE PROCESS 😊</b></>,
     sig: "See you soon! 👋",
     theme: "card-5"
   }
