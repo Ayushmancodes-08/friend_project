@@ -4,42 +4,42 @@ import { DestroyedScreen } from './DestroyedScreen';
 const initialCards = [
   {
     label: "First off...",
-    emoji: "👋",
-    title: "Don't misunderstand me",
-    body: "First of all, please don't take this the wrong way! I'm just getting a whole year's worth of thoughts out in one day, so please don't misunderstand. Au kehi jadi padhila na card except you.. Honestly kahuci katha kharab haba.",
-    sig: "Just hear me out ✉️",
+    emoji: "🤡",
+    title: "Don't overthink this",
+    body: "Please don't take this the wrong way (I know how your brain works). I'm just dumping a lot of thoughts out in one go, so please hold your dramatic reactions. Au kehi jadi padhila na card except you.. Honestly kahuci katha kharab haba.",
+    sig: "Read it quietly 🤫",
     theme: "card-1"
   },
   {
-    label: "Looking back",
-    emoji: "💭",
-    title: "Remember how we used to talk?",
-    body: "I know you hate reading massive texts and I have so much to tell you, so I thought cards would be a much better way to say it all. Plus, we really need to talk about your situation and tadaaaaa I'm here for you .",
-    sig: "Missing our endless chats 💭",
+    label: "Stubborn you",
+    emoji: "🙄",
+    title: "Queen of Stubbornness",
+    body: "Hey, Idk what happened but you are literally toooo stubborn to function normally sometimes. Listen, you don't have to prove anything to anyone. I know you love proving people wrong (and it's a great hobby), but it's only fun until it drains you.",
+    sig: "Chill out a bit ✨",
     theme: "card-2"
   },
   {
-    label: "Heart to heart",
-    emoji: "🥺",
-    title: "That BBSR thing...",
-    body: "i'm not trying to be dramatic here .. but after the bbsr thing, you changed so much making me scared but accha hai ki meri dost zinda hai!",
-    sig: "Glad you're safe though 🫂",
+    label: "Exams & Focus",
+    emoji: "🤓",
+    title: "Books over Drama",
+    body: "Exam asuci, Focus on that instead of being an overthinker. Dusron ke liye apna aura down mat karo, you're better than that. Don't let random unknowns affect your mood unless they actually matter (which they usually don't).",
+    sig: "Protect your peace 🧘",
     theme: "card-3"
   },
   {
-    label: "I get it",
-    emoji: "🤝",
-    title: "But I totally understand",
-    body: "But it's totally okay, I get that you might have exams, personal issues, or you're just busy. I'm not holding anything for you, I understand that life gets chaotic sometimes.",
-    sig: "Still got your back ✨",
+    label: "Reassurance",
+    emoji: "🤪",
+    title: "Everything will be fine",
+    body: "Keep calm, everything will be normal very soon. Hopefully. Tataaaaaaaa! \n\n— To my favorite attacker/friend, officially known as V.",
+    sig: "Keep smiling (even if it hurts) 😊",
     theme: "card-4"
   },
   {
-    label: "Moving forward",
-    emoji: "🏃",
-    title: "Bye!",
-    body: <>Anyway, that's what was on my mind! Tataaa. But you seriously need to buy me an Ice-cream. And yes, mujhe aapka best friend banke Sai ki jagah lene ka koi interest nhi hai but still Bro I'm there. Kabhi kabhi viva ya exam ke liye busy hojaunga but I'm here!!! At least for some more 2 years.<br /><br /><b>TRUST THE PROCESS 😊</b></>,
-    sig: "See you soon! 👋",
+    label: "A Confession",
+    emoji: "🤥",
+    title: "My incredible lying skills",
+    body: "Jahaan tak your guesses about me telling lies... Yup, I do occasionally lie to you. I know you're super smart and usually catch me, but thanks for still giving me chances to be an idiot. THAAAAAAAANNNNNKKKKKKKKK YOOOOOOOUUUUUUUUUUUUUU BRO for dealing with me!!\n\nAnd well, well... believe me, those 'sources' don't stand a chance before you. Ignore them from today, plus your sources can't do anything anyway (lol). So just chill. bbyeee ✌️",
+    sig: "You're the best ❤️",
     theme: "card-5"
   }
 ];
@@ -51,18 +51,22 @@ const API = import.meta.env.VITE_API_URL
 
 async function serverCall(path, body) {
   try {
-    await fetch(`${API}${path}`, {
+    const res = await fetch(`${API}${path}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
-  } catch (e) { /* silent — backend might be offline */ }
+    return await res.json();
+  } catch (e) { 
+    return null;
+  }
 }
 
 export function App() {
   const [current, setCurrent] = useState(0);
   const [isDone, setIsDone] = useState(false);
   const [isDestroyed, setIsDestroyed] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
   const [statusChecked, setStatusChecked] = useState(false);
 
   // Interaction Card State
@@ -82,17 +86,34 @@ export function App() {
   // ── On mount: check destroyed state + notify server of open ─────────────
   useEffect(() => {
     async function init() {
-      try {
-        const res = await fetch(`${API}/status`);
-        const data = await res.json();
-        if (data.destroyed) {
+      // 1. Check local destruction lock first
+      if (localStorage.getItem('isDestroyed') === 'true') {
+        setIsDestroyed(true);
+        setStatusChecked(true);
+        serverCall('/destroy', { replied: false, message: 'Local sync' });
+        return;
+      }
+
+      // 2. Setup Device ID for session lock
+      let deviceId = localStorage.getItem('deviceId');
+      if (!deviceId) {
+        deviceId = Math.random().toString(36).substring(2, 15);
+        localStorage.setItem('deviceId', deviceId);
+      }
+
+      // 3. Connect to backend
+      const res = await serverCall('/open', { deviceId });
+      
+      if (res) {
+        if (res.destroyed) {
           setIsDestroyed(true);
-          setStatusChecked(true);
-          return;
+          localStorage.setItem('isDestroyed', 'true');
+        } else if (res.locked) {
+          setIsLocked(true);
         }
-      } catch (_) { /* backend offline — allow normal use */ }
+      }
+      
       setStatusChecked(true);
-      serverCall('/open', {});
     }
     init();
   }, []);
@@ -171,6 +192,7 @@ export function App() {
   };
 
   const handleNoReply = () => {
+    localStorage.setItem('isDestroyed', 'true');
     // Trigger destroy THEN dismiss
     serverCall('/destroy', { replied: false, message: '' });
     setTimeout(() => setIsDestroyed(true), 2000);
@@ -195,6 +217,7 @@ export function App() {
       })
     }).catch(err => console.error("Error sending email:", err));
 
+    localStorage.setItem('isDestroyed', 'true');
     // Notify server — triggers SMS push + destroy
     serverCall('/destroy', { replied: true, message: replyText });
     setTimeout(() => setIsDestroyed(true), 2500);
@@ -254,7 +277,7 @@ export function App() {
 
   return (
     <>
-      {isDestroyed && <DestroyedScreen />}
+      {(isDestroyed || isLocked) && <DestroyedScreen message={isLocked ? "This link is active on another device." : undefined} />}
 
       {!statusChecked && <div style={{ position: 'fixed', inset: 0, background: '#0d0a0e', zIndex: 9998 }} />}
     

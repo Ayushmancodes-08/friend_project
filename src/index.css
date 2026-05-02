@@ -299,6 +299,27 @@ body {
     display: none; /* Hide scrollbar Chrome/Safari */
 }
 
+/* Custom scrollbar specifically for card 5 to indicate scrollability */
+.card-5 .card-body {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(200, 150, 170, 0.5) transparent;
+    -ms-overflow-style: auto;
+}
+
+.card-5 .card-body::-webkit-scrollbar {
+    display: block;
+    width: 3px;
+}
+
+.card-5 .card-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.card-5 .card-body::-webkit-scrollbar-thumb {
+    background-color: rgba(200, 150, 170, 0.5);
+    border-radius: 3px;
+}
+
 .card-sig {
     margin-top: 24px;
     font-family: 'Dancing Script', cursive;

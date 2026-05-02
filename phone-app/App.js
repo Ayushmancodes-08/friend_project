@@ -9,11 +9,11 @@ import { BACKEND_URL, DESTROY_KEY } from './config';
 
 // ── Card definitions (mirrors server) ────────────────────────────────────
 const CARDS = [
-  { label: "Card 1", desc: "Don't misunderstand me", icon: "👋" },
-  { label: "Card 2", desc: "Remember how we used to talk?", icon: "💭" },
-  { label: "Card 3", desc: "That BBSR thing...", icon: "🥺" },
-  { label: "Card 4", desc: "But I totally understand", icon: "🤝" },
-  { label: "Card 5", desc: "Bye!!", icon: "🏃" },
+  { label: "Card 1", desc: "Don't overthink this", icon: "🤡" },
+  { label: "Card 2", desc: "Queen of Stubbornness", icon: "🙄" },
+  { label: "Card 3", desc: "Books over Drama", icon: "🤓" },
+  { label: "Card 4", desc: "Everything will be fine", icon: "🤪" },
+  { label: "Card 5", desc: "My incredible lying skills", icon: "🤥" },
   { label: "Reply Card", desc: "Any reply?", icon: "💬" },
 ];
 
@@ -48,6 +48,29 @@ export default function App() {
   const [pulseAnim]                 = useState(new Animated.Value(1));
   const scrollRef                   = useRef(null);
 
+  const API_BASE = BACKEND_URL.replace(/\/$/, '');
+
+  // ── Health Check (Wakes up Render & verifies HTTP API) ────────────────
+  useEffect(() => {
+    const checkHealth = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/health`);
+        if (res.ok) {
+          console.log('Backend HTTP health check passed');
+        }
+      } catch (err) {
+        console.log('Backend HTTP health check failed:', err.message);
+      }
+    };
+    
+    // Check immediately on mount
+    checkHealth();
+    
+    // Check every 5 minutes to keep backend alive while app is open
+    const interval = setInterval(checkHealth, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   // ── Pulse animation for live dot ─────────────────────────────────────
   useEffect(() => {
     const loop = Animated.loop(
@@ -69,7 +92,7 @@ export default function App() {
 
   // ── Socket.io connection ──────────────────────────────────────────────
   useEffect(() => {
-    const s = io(BACKEND_URL, {
+    const s = io(API_BASE, {
       transports: ['websocket', 'polling'],
       reconnection: true,
       reconnectionDelay: 2000,
@@ -128,7 +151,7 @@ export default function App() {
   const handleReset = async () => {
     setRLoading(true);
     try {
-      const res = await fetch(`${BACKEND_URL}/api/reset`, {
+      const res = await fetch(`${API_BASE}/api/reset`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key: resetKey }),

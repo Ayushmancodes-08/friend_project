@@ -32,7 +32,7 @@ function readState() {
       return JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
     }
   } catch (_) {}
-  return { destroyed: false, sessionOpen: false, lastCard: 0, replySent: false };
+  return { destroyed: false, sessionOpen: false, lastCard: 0, replySent: false, deviceId: null };
 }
 
 function writeState(patch) {
@@ -92,11 +92,11 @@ async function notifyAll(title, message, priority = 3) {
 
 // ── Card names ────────────────────────────────────────────────────────────
 const cardNames = [
-  "Card 1 — Don't misunderstand me",
-  "Card 2 — Remember how we used to talk?",
-  "Card 3 — That BBSR thing...",
-  "Card 4 — But I totally understand",
-  "Card 5 — Bye!!",
+  "Card 1 — Don't overthink this",
+  "Card 2 — Queen of Stubbornness",
+  "Card 3 — Books over Drama",
+  "Card 4 — Everything will be fine",
+  "Card 5 — My incredible lying skills",
   "Card 6 — Reply Card"
 ];
 
@@ -111,10 +111,19 @@ app.get('/api/status', (req, res) => {
 });
 
 app.post('/api/open', async (req, res) => {
+  const { deviceId } = req.body || {};
   const state = readState();
+  
   if (state.destroyed) return res.json({ destroyed: true });
 
-  writeState({ sessionOpen: true });
+  if (state.sessionOpen) {
+    if (state.deviceId && state.deviceId !== deviceId) {
+      return res.json({ locked: true });
+    }
+    return res.json({ ok: true });
+  }
+
+  writeState({ sessionOpen: true, deviceId });
 
   await notifyAll(
     '👀 She opened your cards!',
@@ -171,7 +180,7 @@ app.post('/api/reset', (req, res) => {
   if (key !== DESTROY_KEY) {
     return res.status(403).json({ error: 'Wrong key' });
   }
-  writeState({ destroyed: false, sessionOpen: false, lastCard: 0, replySent: false });
+  writeState({ destroyed: false, sessionOpen: false, lastCard: 0, replySent: false, deviceId: null });
   io.emit('reset');
   res.json({ ok: true });
 });

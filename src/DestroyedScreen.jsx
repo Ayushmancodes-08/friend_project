@@ -1,6 +1,6 @@
 import { useEffect } from 'preact/hooks';
 
-export function DestroyedScreen() {
+export function DestroyedScreen({ message = "This message has expired." }) {
   // Block all keyboard shortcuts and right-click
   useEffect(() => {
     const block = (e) => e.preventDefault();
@@ -33,7 +33,7 @@ export function DestroyedScreen() {
         padding: '0 32px',
         fontStyle: 'italic',
       }}>
-        This message has expired.
+        {message}
       </p>
     </div>
   );
