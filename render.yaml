@@ -1,7 +1,7 @@
 services:
   - type: web
     name: friend-cards-server
-    env: node
+    runtime: node
     region: singapore   # closest to India
     plan: free
     rootDir: server

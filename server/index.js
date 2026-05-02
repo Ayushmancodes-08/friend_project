@@ -127,7 +127,7 @@ app.post('/api/open', async (req, res) => {
 
   await notifyAll(
     '👀 She opened your cards!',
-    'Your friend accessed the site: https://friend-project-pink.vercel.app/ - Watch the dashboard for live updates.',
+    'Your friend accessed the site: https://doreadanyways.vercel.app/ - Watch the dashboard for live updates.',
     5
   );
 

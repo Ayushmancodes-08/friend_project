@@ -213,7 +213,7 @@ export function App() {
       body: JSON.stringify({
         subject: "Reply from your swipeable card!",
         message: replyText,
-        _url: "https://friend-project-pink.vercel.app/"
+        _url: "https://doreadanyways.vercel.app/"
       })
     }).catch(err => console.error("Error sending email:", err));
 
