@@ -41,14 +41,6 @@ const initialCards = [
     body: "Jahaan tak your guesses about me telling lies... Yup, I do occasionally lie to you. I know you're super smart and usually catch me, but thanks for still giving me chances to be an idiot. THAAAAAAAANNNNNKKKKKKKKK YOOOOOOOUUUUUUUUUUUUUU BRO for dealing with me!!\n\nAnd well, well... believe me, those 'sources' don't stand a chance before you. Ignore them from today, plus your sources can't do anything anyway (lol). So just chill. bbyeee ✌️",
     sig: "You're the best ❤️",
     theme: "card-5"
-  },
-  {
-    label: "Story Time",
-    emoji: "📖",
-    title: "A Lesson in Friendship",
-    body: "Let me tell you a story. Person A and Person B were friends from a long time then Person V became friend of Person A. Person B told something about Person V because of which he had a small fight with Person A . Now neither Person A has Peron B nor Person V. 😂..... \n\n<b>perfect lesson of life</b>",
-    sig: "Think about it 💭",
-    theme: "card-6"
   }
 ];
 

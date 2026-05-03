@@ -97,8 +97,7 @@ const cardNames = [
   "Card 3 — Books over Drama",
   "Card 4 — Everything will be fine",
   "Card 5 — My incredible lying skills",
-  "Card 6 — A Lesson in Friendship",
-  "Card 7 — Reply Card"
+  "Card 6 — Reply Card"
 ];
 
 // ── Health check — pinged by UptimeRobot to keep Render server alive ─────
