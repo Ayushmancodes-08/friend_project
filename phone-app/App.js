@@ -14,6 +14,7 @@ const CARDS = [
   { label: "Card 3", desc: "Books over Drama", icon: "🤓" },
   { label: "Card 4", desc: "Everything will be fine", icon: "🤪" },
   { label: "Card 5", desc: "My incredible lying skills", icon: "🤥" },
+  { label: "Card 6", desc: "A Lesson in Friendship", icon: "📖" },
   { label: "Reply Card", desc: "Any reply?", icon: "💬" },
 ];
 

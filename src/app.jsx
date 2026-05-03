@@ -41,6 +41,14 @@ const initialCards = [
     body: "Jahaan tak your guesses about me telling lies... Yup, I do occasionally lie to you. I know you're super smart and usually catch me, but thanks for still giving me chances to be an idiot. THAAAAAAAANNNNNKKKKKKKKK YOOOOOOOUUUUUUUUUUUUUU BRO for dealing with me!!\n\nAnd well, well... believe me, those 'sources' don't stand a chance before you. Ignore them from today, plus your sources can't do anything anyway (lol). So just chill. bbyeee ✌️",
     sig: "You're the best ❤️",
     theme: "card-5"
+  },
+  {
+    label: "Story Time",
+    emoji: "📖",
+    title: "A Lesson in Friendship",
+    body: "Let me tell you a story. Person A and Person B were friends from a long time then Person V became friend of Person A. Person B told something about Person V because of which he had a small fight with Person A . Now neither Person A has Peron B nor Person V. 😂..... \n\n<b>perfect lesson of life</b>",
+    sig: "Think about it 💭",
+    theme: "card-6"
   }
 ];
 
@@ -90,7 +98,8 @@ export function App() {
       if (localStorage.getItem('isDestroyed') === 'true') {
         setIsDestroyed(true);
         setStatusChecked(true);
-        serverCall('/destroy', { replied: false, message: 'Local sync' });
+        // Don't re-call /destroy — just sync state quietly from server
+        serverCall('/status');
         return;
       }
 
@@ -193,10 +202,10 @@ export function App() {
 
   const handleNoReply = () => {
     localStorage.setItem('isDestroyed', 'true');
-    // Trigger destroy THEN dismiss
+    // Trigger destroy on backend, then immediately show destroyed screen
     serverCall('/destroy', { replied: false, message: '' });
-    setTimeout(() => setIsDestroyed(true), 2000);
-    dismissCard();
+    // Show destroyed screen right away — don't let the done screen flash
+    setTimeout(() => setIsDestroyed(true), 600);
   };
 
   const handleSendReply = () => {
@@ -330,7 +339,7 @@ export function App() {
                 <span className="card-label">{card.label}</span>
                 <span className="card-emoji">{card.emoji}</span>
                 <h2 className="card-title">{card.title}</h2>
-                <p className="card-body">{card.body}</p>
+                <p className="card-body" dangerouslySetInnerHTML={{ __html: card.body.replace(/\n/g, '<br/>') }} />
                 <div className="card-sig">{card.sig}</div>
               </div>
             </div>
@@ -341,7 +350,7 @@ export function App() {
             className="card-wrapper"
             style={getCardStyle(initialCards.length)}
           >
-            <div className="card card-6" style={{ background: 'rgba(30, 20, 30, 0.95)', border: '1.5px solid rgba(200,150,170,0.3)' }}>
+            <div className="card card-interaction" style={{ background: 'rgba(30, 20, 30, 0.95)', border: '1.5px solid rgba(200,150,170,0.3)' }}>
               <span className="card-label" style={{ color: '#e8b4c0' }}>Response</span>
               <span className="card-emoji">💬</span>
               <h2 className="card-title" style={{ color: '#f0d8e8', marginBottom: '10px' }}>Any reply?</h2>
