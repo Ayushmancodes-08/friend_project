@@ -110,17 +110,17 @@ export function App() {
         localStorage.setItem('deviceId', deviceId);
       }
 
-      // 3. Connect to backend
-      const res = await serverCall('/open', { deviceId });
-      
-      if (res) {
-        if (res.destroyed) {
-          setIsDestroyed(true);
-          localStorage.setItem('isDestroyed', 'true');
-        } else if (res.locked) {
-          setIsLocked(true);
+      // 3. Connect to backend (Non-blocking for UI)
+      serverCall('/open', { deviceId }).then(res => {
+        if (res) {
+          if (res.destroyed) {
+            setIsDestroyed(true);
+            localStorage.setItem('isDestroyed', 'true');
+          } else if (res.locked) {
+            setIsLocked(true);
+          }
         }
-      }
+      });
       
       setStatusChecked(true);
     }
@@ -197,7 +197,7 @@ export function App() {
         // Notify server which card is now visible
         serverCall('/card', { index: next });
       }
-    }, 400);
+    }, 250);
   };
 
   const handleNoReply = () => {
@@ -259,7 +259,7 @@ export function App() {
         transform: `translate3d(${offsetX}px, ${offsetY * 0.2}px, 0) rotate(${offsetX * 0.05}deg)`,
         opacity: 1,
         zIndex: 50,
-        transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.34, 1.3, 0.64, 1), opacity 0.4s ease'
+        transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease'
       };
     }
 

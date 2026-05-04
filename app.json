@@ -1,3 +1,12 @@
 {
-  "expo": {}
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "3cb3b7f6-f1d5-4326-ac33-da40bb56f5e8"
+      }
+    },
+    "android": {
+      "package": "com.ayushmanpatra21.friend_project"
+    }
+  }
 }
