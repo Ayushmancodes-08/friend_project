@@ -248,6 +248,12 @@ body {
 .card-3 { background: linear-gradient(145deg, #f0fdf4 0%, #e8f8f0 50%, #eefaf5 100%); }
 .card-4 { background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 50%, #fdf0e0 100%); }
 .card-5 { background: linear-gradient(145deg, #fdf4ff 0%, #f5e8ff 50%, #ede8ff 100%); }
+.card-6 { background: linear-gradient(145deg, #fff0f5 0%, #ffe4e1 50%, #fffafa 100%); }
+
+@keyframes float-msg {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
 
 .card-label {
     font-family: 'Dancing Script', cursive;

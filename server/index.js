@@ -92,12 +92,13 @@ async function notifyAll(title, message, priority = 3) {
 
 // ── Card names ────────────────────────────────────────────────────────────
 const cardNames = [
-  "Card 1 — Don't overthink this",
+  "Card 1 — Hold Your Drama",
   "Card 2 — Queen of Stubbornness",
   "Card 3 — Books over Drama",
-  "Card 4 — Everything will be fine",
-  "Card 5 — My incredible lying skills",
-  "Card 6 — Reply Card"
+  "Card 4 — Don't Panic (Yet)",
+  "Card 5 — My Pro Lying Skills",
+  "Card 6 — Kitten Robot",
+  "Reply Card — Any reply?"
 ];
 
 // ── Health check — pinged by UptimeRobot to keep Render server alive ─────

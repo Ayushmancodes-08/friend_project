@@ -5,8 +5,8 @@ const initialCards = [
   {
     label: "First off...",
     emoji: "🤡",
-    title: "Don't overthink this",
-    body: "Please don't take this the wrong way (I know how your brain works). I'm just dumping a lot of thoughts out in one go, so please hold your dramatic reactions. Au kehi jadi padhila na card except you.. Honestly kahuci katha kharab haba.",
+    title: "Hold Your Drama",
+    body: "Please don't overanalyze this (I know your brain is practically a conspiracy factory). I'm just dumping my thoughts, so kindly keep your dramatic reactions to yourself. And listen, au kehi jadi padhila na card except you... honestly kahuci katha kharab haba. Keep it top secret, genius.",
     sig: "Read it quietly 🤫",
     theme: "card-1"
   },
@@ -14,33 +14,41 @@ const initialCards = [
     label: "Stubborn you",
     emoji: "🙄",
     title: "Queen of Stubbornness",
-    body: "Hey, Idk what happened but you are literally toooo stubborn to function normally sometimes. Listen, you don't have to prove anything to anyone. I know you love proving people wrong (and it's a great hobby), but it's only fun until it drains you.",
-    sig: "Chill out a bit ✨",
+    body: "Hey, Idk what virus hit your system but you are literally too stubborn to function normally half the time. You don't have to prove everything to everyone! Yes, I know proving people wrong is your favorite extreme sport, but it's only fun until it completely drains your battery.",
+    sig: "Chill out a bit, seriously ✨",
     theme: "card-2"
   },
   {
     label: "Exams & Focus",
     emoji: "🤓",
     title: "Books over Drama",
-    body: "Exam asuci, Focus on that instead of being an overthinker. Dusron ke liye apna aura down mat karo, you're better than that. Don't let random unknowns affect your mood unless they actually matter (which they usually don't).",
-    sig: "Protect your peace 🧘",
+    body: "Exams aa rahe hain, focus on that instead of running a full-time overthinking marathon. Random logon ke liye apna premium aura down mat karo, you're literally better than that. Stop letting irrelevant NPCs affect your mood, they don't even matter anyway.",
+    sig: "Protect your peace, weirdo 🧘",
     theme: "card-3"
   },
   {
     label: "Reassurance",
     emoji: "🤪",
-    title: "Everything will be fine",
-    body: "Keep calm, everything will be normal very soon. Hopefully. Tataaaaaaaa! \n\n— To my favorite attacker/friend, officially known as V.",
-    sig: "Keep smiling (even if it hurts) 😊",
+    title: "Don't Panic (Yet)",
+    body: "Keep calm, everything will be back to normal very soon. Hopefully. Unless you decide to stay in this weird mode forever. Tataaaaaaaa! \n\n— To my favorite certified attacker/friend, officially known as V.",
+    sig: "Keep smiling (even if it kills you) 😊",
     theme: "card-4"
   },
   {
     label: "A Confession",
     emoji: "🤥",
-    title: "My incredible lying skills",
-    body: "Jahaan tak your guesses about me telling lies... Yup, I do occasionally lie to you. I know you're super smart and usually catch me, but thanks for still giving me chances to be an idiot. THAAAAAAAANNNNNKKKKKKKKK YOOOOOOOUUUUUUUUUUUUUU BRO for dealing with me!!\n\nAnd well, well... believe me, those 'sources' don't stand a chance before you. Ignore them from today, plus your sources can't do anything anyway (lol). So just chill. bbyeee ✌️",
-    sig: "You're the best ❤️",
+    title: "My Pro Lying Skills",
+    body: "Jahaan tak your epic detective guesses about me lying... Yup, guilty. I do occasionally lie to you. I know you think you're Sherlock and usually catch me, but thanks for still letting me be an absolute idiot sometimes. THAAAAAAAANNNNNKKKKKKKKK YOOOOOOOUUUUUUUUUUUUUU BRO for dealing with my nonsense!!\n\nAnd yeah, those 'sources' you worry about? They don't stand a chance against you. Unko ignore maar aaj se. They can't do anything anyway (lol). So just chill and stop panicking. bbyeee ✌️",
+    sig: "You're still the best (barely) ❤️",
     theme: "card-5"
+  },
+  {
+    label: "Kitten Robot",
+    emoji: "🤖🐱",
+    title: "Beep Boop Meow",
+    body: "<span class=\"floating-message\" style=\"display: inline-block; animation: float-msg 3s ease-in-out infinite;\">Still trying to decode the glitch that makes you act like a normal human with everyone else but completely malfunction around me. Khair, ab maine apni galtiyaan toh maan li. Happy? Whatever, get well soon chudail!!!?! 😊 Seriously, pta nhi kab tak yeh sad potato face dekhna padega. Use some emojis bro, stop being so dry and bounce back to normal already!</span>",
+    sig: "🤖💬",
+    theme: "card-6"
   }
 ];
 

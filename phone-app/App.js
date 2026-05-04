@@ -9,11 +9,12 @@ import { BACKEND_URL, DESTROY_KEY } from './config';
 
 // ── Card definitions (mirrors server) ────────────────────────────────────
 const CARDS = [
-  { label: "Card 1", desc: "Don't overthink this", icon: "🤡" },
+  { label: "Card 1", desc: "Hold Your Drama", icon: "🤡" },
   { label: "Card 2", desc: "Queen of Stubbornness", icon: "🙄" },
   { label: "Card 3", desc: "Books over Drama", icon: "🤓" },
-  { label: "Card 4", desc: "Everything will be fine", icon: "🤪" },
-  { label: "Card 5", desc: "My incredible lying skills", icon: "🤥" },
+  { label: "Card 4", desc: "Don't Panic (Yet)", icon: "🤪" },
+  { label: "Card 5", desc: "My Pro Lying Skills", icon: "🤥" },
+  { label: "Card 6", desc: "Kitten Robot", icon: "🤖🐱" },
   { label: "Reply Card", desc: "Any reply?", icon: "💬" },
 ];
 
