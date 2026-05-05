@@ -136,6 +136,21 @@ app.post('/api/open', async (req, res) => {
   res.json({ ok: true });
 });
 
+app.post('/api/disclaimer', async (req, res) => {
+  const state = readState();
+  if (state.destroyed) return res.json({ destroyed: true });
+
+  io.emit('disclaimer_accepted', { time: new Date().toISOString() });
+
+  await notifyAll(
+    '⚠️ Disclaimer Accepted!',
+    'She has read the warning and proceeded to the cards.',
+    3
+  );
+
+  res.json({ ok: true });
+});
+
 app.post('/api/card', async (req, res) => {
   const { index } = req.body;
   const state = readState();

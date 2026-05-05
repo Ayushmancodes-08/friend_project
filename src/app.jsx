@@ -76,6 +76,7 @@ export function App() {
   const [isDestroyed, setIsDestroyed] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [statusChecked, setStatusChecked] = useState(false);
+  const [acceptedDisclaimer, setAcceptedDisclaimer] = useState(false);
 
   // Interaction Card State
   const [showReplyInput, setShowReplyInput] = useState(false);
@@ -289,8 +290,31 @@ export function App() {
       {(isDestroyed || isLocked) && <DestroyedScreen message={isLocked ? "This link is active on another device." : undefined} />}
 
       {!statusChecked && <div style={{ position: 'fixed', inset: 0, background: '#0d0a0e', zIndex: 9998 }} />}
-    
-      <div className="bg"></div>
+
+      {!acceptedDisclaimer && statusChecked && !isDestroyed && !isLocked && (
+        <div className="disclaimer-screen">
+          <div className="disclaimer-content">
+            <h2 className="disclaimer-title">DISCLAIMER</h2>
+            <div className="disclaimer-line"></div>
+            <p className="disclaimer-text">
+              This digital envelope is strictly intended for <span>Venali Sahoo</span> (my friend before 12th April 2026).
+            </p>
+            <p className="disclaimer-subtext">
+              If you are not the intended recipient, your presence here is a violation of privacy. Please close this tab and ignore its existence immediately.
+            </p>
+            <button className="enter-btn" onClick={() => {
+              serverCall('/disclaimer');
+              setAcceptedDisclaimer(true);
+            }}>
+              ENTER WITH CAUTION
+            </button>
+          </div>
+        </div>
+      )}
+
+      {acceptedDisclaimer && (
+        <>
+          <div className="bg"></div>
       <div className="petals">
         {petals.map(p => (
           <div
@@ -419,6 +443,8 @@ export function App() {
           <p>Thank you for taking the time to read everything.</p>
           <button className="restart-btn" onClick={restart}>Read Again ↻</button>
         </div>
+      )}
+        </>
       )}
     </>
   );

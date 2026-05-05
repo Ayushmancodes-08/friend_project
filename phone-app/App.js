@@ -117,6 +117,11 @@ export default function App() {
       Vibration.vibrate([0, 100, 50, 100]);
     });
 
+    s.on('disclaimer_accepted', () => {
+      addEvent('⚠️ Disclaimer accepted! Proceeding…');
+      Vibration.vibrate([0, 80, 40, 80]);
+    });
+
     s.on('card_view', ({ index, name }) => {
       setCard(index);
       addEvent(`📖 Now reading: ${name}`);
