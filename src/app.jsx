@@ -3,52 +3,28 @@ import { DestroyedScreen } from './DestroyedScreen';
 
 const initialCards = [
   {
-    label: "First off...",
-    emoji: "🤡",
-    title: "Hold Your Drama",
-    body: "Please don't overanalyze this (I know your brain is practically a conspiracy factory). I'm just dumping my thoughts, so kindly keep your dramatic reactions to yourself. And listen, au kehi jadi padhila na card except you... honestly kahuci katha kharab haba. Keep it top secret, genius.",
-    sig: "Read it quietly 🤫",
+    label: "External Noise",
+    emoji: "🚗💀",
+    title: "A Friendly Warning",
+    body: "Listen, if all this drama is your own masterpiece, I'll take it. But if some 'well-wisher' is feeding your brain these weird ideas about me... I genuinely hope they trip and find themselves under a speeding car. 😂 Just kidding (mostly). But seriously, stop letting NPCs write the script for us. If someone's putting things in your mind, they better have good insurance.",
+    sig: "Protect your peace (and them) 🕵️‍♀️",
     theme: "card-1"
   },
   {
-    label: "Stubborn you",
-    emoji: "🙄",
-    title: "Queen of Stubbornness",
-    body: "Hey, Idk what virus hit your system but you are literally too stubborn to function normally half the time. You don't have to prove everything to everyone! Yes, I know proving people wrong is your favorite extreme sport, but it's only fun until it completely drains your battery.",
-    sig: "Chill out a bit, seriously ✨",
+    label: "Inner Chaos",
+    emoji: "🧠🌪️",
+    title: "The Silent Treatment?",
+    body: "Maybe I'm just running a marathon in my own head again, but since we last talked (mostly 1 month ago), I've had this nagging feeling that you don't actually want to talk to me anymore. Is it just my overthinking hitting peak performance levels, or are you actually in airplane mode? Either way, it sucks. Wake up, bro! ",
+    sig: "Stop making me overthink, it's exhausting 🧘‍♂️",
     theme: "card-2"
   },
   {
-    label: "Exams & Focus",
-    emoji: "🤓",
-    title: "Books over Drama",
-    body: "Exams aa rahe hain, focus on that instead of running a full-time overthinking marathon. Random logon ke liye apna premium aura down mat karo, you're literally better than that. Stop letting irrelevant NPCs affect your mood, they don't even matter anyway.",
-    sig: "Protect your peace, weirdo 🧘",
+    label: "The Roast Session",
+    emoji: "💅🧟‍♀️",
+    title: "Honest Feedback (No Filter)",
+    body: "<div style=\"display: flex; gap: 10px; height: 100%; text-align: left; font-size: 0.85rem;\"><div style=\"flex: 1; border-right: 1px dashed rgba(200, 120, 140, 0.3); padding-right: 8px;\"><strong>THE LIST:</strong><br/>Tu literally Andhi hai, Behri hai, aur upar se super Rude.<br/><br/>Like, how do you manage to ignore everything so perfectly? 🙄</div><div style=\"flex: 1; padding-left: 5px;\"><strong>THE REST:</strong><br/>Arrogant toh blood group hai tera. Certified <b>CHUDAIL</b> vibes. 🧹✨<br/><br/>But hey, at least you're consistent in being a headache.</div></div>",
+    sig: "Don't get mad, get better (impossible) 😂",
     theme: "card-3"
-  },
-  {
-    label: "Reassurance",
-    emoji: "🤪",
-    title: "Don't Panic (Yet)",
-    body: "Keep calm, everything will be back to normal very soon. Hopefully. Unless you decide to stay in this weird mode forever. Tataaaaaaaa! \n\n— To my favorite certified attacker/friend, officially known as V.",
-    sig: "Keep smiling (even if it kills you) 😊",
-    theme: "card-4"
-  },
-  {
-    label: "A Confession",
-    emoji: "🤥",
-    title: "My Pro Lying Skills",
-    body: "Jahaan tak your epic detective guesses about me lying... Yup, guilty. I do occasionally lie to you. I know you think you're Sherlock and usually catch me, but thanks for still letting me be an absolute idiot sometimes. THAAAAAAAANNNNNKKKKKKKKK YOOOOOOOUUUUUUUUUUUUUU BRO for dealing with my nonsense!!\n\nAnd yeah, those 'sources' you worry about? They don't stand a chance against you. Unko ignore maar aaj se. They can't do anything anyway (lol). So just chill and stop panicking. bbyeee ✌️",
-    sig: "You're still the best (barely) ❤️",
-    theme: "card-5"
-  },
-  {
-    label: "Kitten Robot",
-    emoji: "🤖🐱",
-    title: "Beep Boop Meow",
-    body: "<span class=\"floating-message\" style=\"display: inline-block; animation: float-msg 3s ease-in-out infinite;\">Still trying to decode the glitch that makes you act like a normal human with everyone else but completely malfunction around me. Khair, ab maine apni galtiyaan toh maan li. Happy? Whatever, get well soon chudail!!!?! 😊 Seriously, pta nhi kab tak yeh sad potato face dekhna padega. Use some emojis bro, stop being so dry and bounce back to normal already!</span>",
-    sig: "🤖💬",
-    theme: "card-6"
   }
 ];
 

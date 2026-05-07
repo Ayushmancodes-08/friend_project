@@ -1,6 +1,7 @@
 {
   "destroyed": false,
-  "sessionOpen": true,
-  "lastCard": 2,
-  "replySent": false
+  "sessionOpen": false,
+  "lastCard": 0,
+  "replySent": false,
+  "deviceId": null
 }

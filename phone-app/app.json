@@ -14,10 +14,16 @@
         "expo-build-properties",
         {
           "android": {
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36,
+            "minSdkVersion": 24,
             "enableProguardInReleaseBuilds": true,
             "enableShrinkResourcesInReleaseBuilds": true,
             "abiFilters": [
-              "arm64-v8a"
+              "armeabi-v7a",
+              "arm64-v8a",
+              "x86",
+              "x86_64"
             ]
           }
         }

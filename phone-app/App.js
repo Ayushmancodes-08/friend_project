@@ -9,13 +9,10 @@ import { BACKEND_URL, DESTROY_KEY } from './config';
 
 // ── Card definitions (mirrors server) ────────────────────────────────────
 const CARDS = [
-  { label: "Card 1", desc: "Hold Your Drama", icon: "🤡" },
-  { label: "Card 2", desc: "Queen of Stubbornness", icon: "🙄" },
-  { label: "Card 3", desc: "Books over Drama", icon: "🤓" },
-  { label: "Card 4", desc: "Don't Panic (Yet)", icon: "🤪" },
-  { label: "Card 5", desc: "My Pro Lying Skills", icon: "🤥" },
-  { label: "Card 6", desc: "Kitten Robot", icon: "🤖🐱" },
-  { label: "Reply Card", desc: "Any reply?", icon: "💬" },
+  { label: "External Noise", desc: "A Friendly Warning", icon: "🚗💀" },
+  { label: "Inner Chaos", desc: "The Silent Treatment?", icon: "🧠🌪️" },
+  { label: "The Roast Session", desc: "Honest Feedback (No Filter)", icon: "💅🧟‍♀️" },
+  { label: "Response", desc: "Any reply?", icon: "💬" },
 ];
 
 // ── Colors ────────────────────────────────────────────────────────────────

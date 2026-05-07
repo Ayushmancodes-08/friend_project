@@ -28,3 +28,12 @@ dist-ssr
 *.sw?
 
 chat_backups/
+
+# Android / Mobile
+phone-app/android/
+phone-app/ios/
+phone-app/.expo/
+*.apk
+*.aab
+*.jks
+phone-app/android/local.properties
