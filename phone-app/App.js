@@ -11,6 +11,7 @@ import { BACKEND_URL, DESTROY_KEY } from './config';
 const CARDS = [
   { label: "External Noise", desc: "A Friendly Warning", icon: "🚗💀" },
   { label: "Inner Chaos", desc: "The Silent Treatment?", icon: "🧠🌪️" },
+  { label: "Ignoring Pro Max", desc: "Award-Winning Performance", icon: "🎭🏆" },
   { label: "The Roast Session", desc: "Honest Feedback (No Filter)", icon: "💅🧟‍♀️" },
   { label: "Response", desc: "Any reply?", icon: "💬" },
 ];

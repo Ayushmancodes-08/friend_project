@@ -19,12 +19,20 @@ const initialCards = [
     theme: "card-2"
   },
   {
+    label: "Ignoring Pro Max",
+    emoji: "🎭🏆",
+    title: "Award-Winning Performance",
+    body: "And haan, beautifully ignoring me, perfectly avoiding conversations... maybe I do understand the reason, but honestly? I really don't want to. Keep up the silent treatment though, it's truly a masterpiece. 💅✨<br/><br/>But don't worry... things will be perfectly fine very, very soon. 😌",
+    sig: "Your favorite overthinker 💭",
+    theme: "card-3"
+  },
+  {
     label: "The Roast Session",
     emoji: "💅🧟‍♀️",
     title: "Honest Feedback (No Filter)",
     body: "<div style=\"display: flex; gap: 10px; height: 100%; text-align: left; font-size: 0.85rem;\"><div style=\"flex: 1; border-right: 1px dashed rgba(200, 120, 140, 0.3); padding-right: 8px;\"><strong>THE LIST:</strong><br/>Tu literally Andhi hai, Behri hai, aur upar se super Rude.<br/><br/>Like, how do you manage to ignore everything so perfectly? 🙄</div><div style=\"flex: 1; padding-left: 5px;\"><strong>THE REST:</strong><br/>Arrogant toh blood group hai tera. Certified <b>CHUDAIL</b> vibes. 🧹✨<br/><br/>But hey, at least you're consistent in being a headache.</div></div>",
     sig: "Don't get mad, get better (impossible) 😂",
-    theme: "card-3"
+    theme: "card-4"
   }
 ];
 
