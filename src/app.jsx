@@ -330,7 +330,7 @@ export function App() {
             <h2 className="disclaimer-title">DISCLAIMER</h2>
             <div className="disclaimer-line"></div>
             <p className="disclaimer-text">
-              This digital envelope is strictly intended for <span>Venali Sahoo</span> (my friend before 12th April 2026).
+              This digital envelope is strictly intended for <span>Venali Sahoo</span>.
             </p>
             <p className="disclaimer-subtext">
               If you are not the intended recipient, your presence here is a violation of privacy. Please close this tab and ignore its existence immediately.
