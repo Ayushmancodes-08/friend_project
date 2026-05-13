@@ -2,17 +2,19 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity, TextInput,
   StyleSheet, StatusBar, Animated, Platform, Alert,
-  SafeAreaView, ActivityIndicator, Vibration
+  SafeAreaView, ActivityIndicator, Vibration, Switch
 } from 'react-native';
 import { io } from 'socket.io-client';
 import { BACKEND_URL, DESTROY_KEY } from './config';
 
 // ── Card definitions (mirrors server) ────────────────────────────────────
 const CARDS = [
-  { label: "External Noise", desc: "A Friendly Warning", icon: "🚗💀" },
-  { label: "Inner Chaos", desc: "The Silent Treatment?", icon: "🧠🌪️" },
-  { label: "Ignoring Pro Max", desc: "Award-Winning Performance", icon: "🎭🏆" },
-  { label: "The Roast Session", desc: "Honest Feedback (No Filter)", icon: "💅🧟‍♀️" },
+  { label: "VIP Treatment", desc: "Fortune 500 CEO?", icon: "👔🚂" },
+  { label: "Disappearing Act", desc: "The Slow Fade", icon: "🥷💨" },
+  { label: "Reality Check", desc: "Scroll Up Please", icon: "📱👀" },
+  { label: "My Bad", desc: "Self-Reflection", icon: "😅🤦‍♂️" },
+  { label: "Farewell", desc: "Adios, Amigo!", icon: "🎩💼" },
+  { label: "Maun Vrat", desc: "Silent Mode Activated", icon: "🤐🛑" },
   { label: "Response", desc: "Any reply?", icon: "💬" },
 ];
 
@@ -44,6 +46,8 @@ export default function App() {
   const [resetKey, setResetKey]     = useState('');
   const [resetLoading, setRLoading] = useState(false);
   const [showReset, setShowReset]   = useState(false);
+  const [cardsVisible, setCardsVisible] = useState(true);
+  const [visLoading, setVisLoading] = useState(false);
   const [pulseAnim]                 = useState(new Animated.Value(1));
   const scrollRef                   = useRef(null);
 
@@ -106,7 +110,13 @@ export default function App() {
       setSession(state.sessionOpen);
       setCard(state.lastCard ?? -1);
       setReplied(state.replySent ? true : null);
+      setCardsVisible(state.cardsVisible !== false);
       addEvent('📡 Synced with server');
+    });
+
+    s.on('visibility_changed', (state) => {
+      setCardsVisible(state.cardsVisible !== false);
+      addEvent(`👁️ Cards visibility: ${state.cardsVisible ? 'ON' : 'OFF'}`);
     });
 
     s.on('session_open', () => {
@@ -144,12 +154,36 @@ export default function App() {
       setCard(-1);
       setReplied(null);
       setReplyMsg('');
+      setCardsVisible(true);
       addEvent('🔓 App reset by developer');
     });
 
     setSocket(s);
     return () => s.disconnect();
   }, []);
+
+  // ── Visibility handler ───────────────────────────────────────────────
+  const handleVisibilityToggle = async (value) => {
+    // Optimistic UI update
+    setCardsVisible(value);
+    setVisLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/visibility`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: DESTROY_KEY, visible: value }),
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        Alert.alert('❌ Error', data.error || 'Failed to toggle visibility');
+        setCardsVisible(!value); // Revert on failure
+      }
+    } catch {
+      Alert.alert('❌ Error', 'Could not reach server');
+      setCardsVisible(!value); // Revert on failure
+    }
+    setVisLoading(false);
+  };
 
   // ── Reset handler ────────────────────────────────────────────────────
   const handleReset = async () => {
@@ -287,9 +321,32 @@ export default function App() {
           )}
         </View>
 
-        {/* ── Developer Reset ── */}
+        {/* ── Developer Controls ── */}
         <View style={s.card}>
           <Text style={s.sectionLabel}>DEVELOPER CONTROLS</Text>
+          
+          {/* Visibility Toggle */}
+          <View style={s.visibilityRow}>
+            <View>
+              <Text style={s.visibilityTitle}>Cards Visibility</Text>
+              <Text style={s.visibilityDesc}>
+                {cardsVisible ? 'Cards are visible to the user' : 'User sees "Coming soon" screen'}
+              </Text>
+            </View>
+            <View style={s.switchContainer}>
+              {visLoading && <ActivityIndicator color={C.accent} size="small" style={{marginRight: 10}} />}
+              <Switch
+                value={cardsVisible}
+                onValueChange={handleVisibilityToggle}
+                trackColor={{ false: C.border, true: C.greenDim }}
+                thumbColor={cardsVisible ? C.green : '#f4f3f4'}
+                ios_backgroundColor={C.border}
+                disabled={visLoading}
+              />
+            </View>
+          </View>
+
+          {/* Reset Toggle */}
           <TouchableOpacity
             style={s.resetToggle}
             onPress={() => setShowReset(!showReset)}
@@ -370,6 +427,11 @@ const s = StyleSheet.create({
   eventRow:     { flexDirection: 'row', gap: 10, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.04)' },
   eventTime:    { fontSize: 11, color: C.muted, width: 70 },
   eventMsg:     { fontSize: 13, color: C.subtext, flex: 1, lineHeight: 18 },
+
+  visibilityRow:{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.02)', padding: 14, borderRadius: 12, marginBottom: 14, borderWidth: 1, borderColor: 'rgba(255,255,255,0.04)' },
+  visibilityTitle:{ color: C.text, fontSize: 15, fontWeight: '600', marginBottom: 2 },
+  visibilityDesc: { color: C.muted, fontSize: 12 },
+  switchContainer:{ flexDirection: 'row', alignItems: 'center' },
 
   resetToggle:  { backgroundColor: C.accentDim, borderRadius: 12, padding: 14, alignItems: 'center', borderWidth: 1, borderColor: 'rgba(201,123,132,0.3)' },
   resetToggleText: { color: C.accent, fontWeight: '700', fontSize: 14 },

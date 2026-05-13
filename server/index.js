@@ -29,10 +29,12 @@ const STATE_FILE = path.join(__dirname, 'state.json');
 function readState() {
   try {
     if (fs.existsSync(STATE_FILE)) {
-      return JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
+      const state = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
+      if (state.cardsVisible === undefined) state.cardsVisible = true;
+      return state;
     }
   } catch (_) {}
-  return { destroyed: false, sessionOpen: false, lastCard: 0, replySent: false, deviceId: null };
+  return { destroyed: false, sessionOpen: false, lastCard: 0, replySent: false, deviceId: null, cardsVisible: true };
 }
 
 function writeState(patch) {
@@ -92,9 +94,12 @@ async function notifyAll(title, message, priority = 3) {
 
 // ── Card names ────────────────────────────────────────────────────────────
 const cardNames = [
-  "External Noise — A Friendly Warning",
-  "Inner Chaos — The Silent Treatment?",
-  "The Roast Session — Honest Feedback",
+  "VIP Treatment — Fortune 500 CEO?",
+  "Disappearing Act — The Slow Fade",
+  "Reality Check — Scroll Up Please",
+  "My Bad — Self-Reflection",
+  "Farewell — Adios, Amigo!",
+  "Maun Vrat — Silent Mode Activated",
   "Response — Any reply?"
 ];
 
@@ -105,7 +110,7 @@ app.get('/health', (req, res) => {
 
 app.get('/api/status', (req, res) => {
   const state = readState();
-  res.json({ destroyed: state.destroyed });
+  res.json({ destroyed: state.destroyed, cardsVisible: state.cardsVisible });
 });
 
 app.post('/api/open', async (req, res) => {
@@ -118,7 +123,7 @@ app.post('/api/open', async (req, res) => {
     if (state.deviceId && state.deviceId !== deviceId) {
       return res.json({ locked: true });
     }
-    return res.json({ ok: true });
+    return res.json({ ok: true, cardsVisible: state.cardsVisible });
   }
 
   writeState({ sessionOpen: true, deviceId });
@@ -130,7 +135,7 @@ app.post('/api/open', async (req, res) => {
   );
 
   io.emit('session_open', { time: new Date().toISOString() });
-  res.json({ ok: true });
+  res.json({ ok: true, cardsVisible: state.cardsVisible });
 });
 
 app.post('/api/disclaimer', async (req, res) => {
@@ -146,6 +151,16 @@ app.post('/api/disclaimer', async (req, res) => {
   );
 
   res.json({ ok: true });
+});
+
+app.post('/api/visibility', (req, res) => {
+  const { visible, key } = req.body;
+  if (key !== DESTROY_KEY) {
+    return res.status(403).json({ error: 'Wrong key' });
+  }
+  const state = writeState({ cardsVisible: !!visible });
+  io.emit('visibility_changed', { cardsVisible: state.cardsVisible });
+  res.json({ ok: true, cardsVisible: state.cardsVisible });
 });
 
 app.post('/api/card', async (req, res) => {
@@ -193,7 +208,7 @@ app.post('/api/reset', (req, res) => {
   if (key !== DESTROY_KEY) {
     return res.status(403).json({ error: 'Wrong key' });
   }
-  writeState({ destroyed: false, sessionOpen: false, lastCard: 0, replySent: false, deviceId: null });
+  writeState({ destroyed: false, sessionOpen: false, lastCard: 0, replySent: false, deviceId: null, cardsVisible: true });
   io.emit('reset');
   res.json({ ok: true });
 });

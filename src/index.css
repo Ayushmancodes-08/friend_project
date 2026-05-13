@@ -531,3 +531,28 @@ body {
     color: #1a0505;
     box-shadow: 0 0 20px rgba(255, 77, 77, 0.4);
 }
+
+/* Coming Soon Screen */
+.coming-soon-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    animation: fadeIn 1s ease-out;
+}
+
+.coming-soon-content {
+    text-align: center;
+}
+
+.coming-soon-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    color: var(--ink);
+    letter-spacing: 0.1em;
+    font-weight: 600;
+}

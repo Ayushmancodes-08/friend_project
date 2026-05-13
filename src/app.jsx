@@ -3,36 +3,52 @@ import { DestroyedScreen } from './DestroyedScreen';
 
 const initialCards = [
   {
-    label: "External Noise",
-    emoji: "🚗💀",
-    title: "A Friendly Warning",
-    body: "Listen, if all this drama is your own masterpiece, I'll take it. But if some 'well-wisher' is feeding your brain these weird ideas about me... I genuinely hope they trip and find themselves under a speeding car. 😂 Just kidding (mostly). But seriously, stop letting NPCs write the script for us. If someone's putting things in your mind, they better have good insurance.",
-    sig: "Protect your peace (and them) 🕵️‍♀️",
+    label: "VIP Treatment",
+    emoji: "👔🚂",
+    title: "Fortune 500 CEO?",
+    body: "Hey! Honestly, I’m starting to think you've secretly become the CEO of a Fortune 500 company, because getting your time is harder than getting a Tatkal train ticket! 🚂<br/><br/>Every time we try to talk, it’s either exams, work, or some top-secret mission. It makes me wonder, are you this busy with everyone, or am I getting the exclusive VIP 'no-time' treatment? 🙃",
+    sig: "Still waiting in the lobby 🕰️",
     theme: "card-1"
   },
   {
-    label: "Inner Chaos",
-    emoji: "🧠🌪️",
-    title: "The Silent Treatment?",
-    body: "Maybe I'm just running a marathon in my own head again, but since we last talked (mostly 1 month ago), I've had this nagging feeling that you don't actually want to talk to me anymore. Is it just my overthinking hitting peak performance levels, or are you actually in airplane mode? Either way, it sucks. Wake up, bro! ",
-    sig: "Stop making me overthink, it's exhausting 🧘‍♂️",
+    label: "Disappearing Act",
+    emoji: "🥷💨",
+    title: "The Slow Fade",
+    body: "Jokes apart, lately it feels like you’re hoping I’ll just slowly evaporate into thin air.<br/><br/>If you're trying to ninja your way out of this friendship, just tell me, I promise I'll disappear without any drama. 🥷",
+    sig: "Poof! 💨",
     theme: "card-2"
   },
   {
-    label: "Ignoring Pro Max",
-    emoji: "🎭🏆",
-    title: "Award-Winning Performance",
-    body: "And haan, beautifully ignoring me, perfectly avoiding conversations... maybe I do understand the reason, but honestly? I really don't want to. Keep up the silent treatment though, it's truly a masterpiece. 💅✨<br/><br/>But don't worry... things will be perfectly fine very, very soon. 😌",
-    sig: "Your favorite overthinker 💭",
+    label: "Reality Check",
+    emoji: "📱👀",
+    title: "Scroll Up Please",
+    body: "When you finally get a break from ruling the world, just scroll up and read our old chats.<br/><br/>Ask yourself honestly if you were talking to a friend, or just a random telecaller trying to sell you a credit card. 😂 It really hasn't felt like a normal conversation.",
+    sig: "Not selling credit cards 💳",
     theme: "card-3"
   },
   {
-    label: "The Roast Session",
-    emoji: "💅🧟‍♀️",
-    title: "Honest Feedback (No Filter)",
-    body: "<div style=\"display: flex; gap: 10px; height: 100%; text-align: left; font-size: 0.85rem;\"><div style=\"flex: 1; border-right: 1px dashed rgba(200, 120, 140, 0.3); padding-right: 8px;\"><strong>THE LIST:</strong><br/>Tu literally Andhi hai, Behri hai, aur upar se super Rude.<br/><br/>Like, how do you manage to ignore everything so perfectly? 🙄</div><div style=\"flex: 1; padding-left: 5px;\"><strong>THE REST:</strong><br/>Arrogant toh blood group hai tera. Certified <b>CHUDAIL</b> vibes. 🧹✨<br/><br/>But hey, at least you're consistent in being a headache.</div></div>",
-    sig: "Don't get mad, get better (impossible) 😂",
+    label: "My Bad",
+    emoji: "😅🤦‍♂️",
+    title: "Self-Reflection",
+    body: "I know I’m not perfect either. I might have annoyed you or acted stupid sometimes (okay, maybe a lot of times 😅).<br/><br/>But I promise none of it was intentional. I never wanted to make you feel bad.",
+    sig: "An annoying (but harmless) friend 😇",
     theme: "card-4"
+  },
+  {
+    label: "Farewell",
+    emoji: "🎩💼",
+    title: "Adios, Amigo!",
+    body: "Anyway, adios, amigo! Take care of yourself, and best of luck with your incredibly packed schedule and all that 'time' you’re hoarding.<br/><br/>Just one tiny request: don’t give this 'busy' treatment to anyone else, not even your worst enemies, it's a lethal weapon! 😂",
+    sig: "Time is money (apparently) 💸",
+    theme: "card-5"
+  },
+  {
+    label: "Maun Vrat",
+    emoji: "🤐🛑",
+    title: "Silent Mode Activated",
+    body: "Oh, and one last thing... I’m officially going on a 'maun vrat' (silent mode). 🤐<br/><br/>I won't be reaching out or texting from now on unless you text or talk to me first. The ball is in your court now! Tata! 👋",
+    sig: "Over and out 📻",
+    theme: "card-6"
   }
 ];
 
@@ -61,6 +77,7 @@ export function App() {
   const [isLocked, setIsLocked] = useState(false);
   const [statusChecked, setStatusChecked] = useState(false);
   const [acceptedDisclaimer, setAcceptedDisclaimer] = useState(false);
+  const [cardsVisible, setCardsVisible] = useState(true);
 
   // Interaction Card State
   const [showReplyInput, setShowReplyInput] = useState(false);
@@ -83,8 +100,12 @@ export function App() {
       if (localStorage.getItem('isDestroyed') === 'true') {
         setIsDestroyed(true);
         setStatusChecked(true);
-        // Don't re-call /destroy — just sync state quietly from server
-        serverCall('/status');
+        // Don't re-call /destroy ,  just sync state quietly from server
+        serverCall('/status').then(res => {
+          if (res && res.cardsVisible !== undefined) {
+            setCardsVisible(res.cardsVisible);
+          }
+        });
         return;
       }
 
@@ -104,6 +125,9 @@ export function App() {
           } else if (res.locked) {
             setIsLocked(true);
           }
+          if (res.cardsVisible !== undefined) {
+            setCardsVisible(res.cardsVisible);
+          }
         }
       });
       
@@ -111,6 +135,23 @@ export function App() {
     }
     init();
   }, []);
+
+  // ── Poll for status changes every 3 seconds ───────────────────────────────
+  useEffect(() => {
+    if (!statusChecked) return;
+    const interval = setInterval(async () => {
+      const res = await serverCall('/status');
+      if (res) {
+        if (res.destroyed) {
+          setIsDestroyed(true);
+          localStorage.setItem('isDestroyed', 'true');
+        }
+        if (res.locked) setIsLocked(true);
+        if (res.cardsVisible !== undefined) setCardsVisible(res.cardsVisible);
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [statusChecked]);
 
   // Floating Petals
   const [petals, setPetals] = useState([]);
@@ -189,7 +230,7 @@ export function App() {
     localStorage.setItem('isDestroyed', 'true');
     // Trigger destroy on backend, then immediately show destroyed screen
     serverCall('/destroy', { replied: false, message: '' });
-    // Show destroyed screen right away — don't let the done screen flash
+    // Show destroyed screen right away ,  don't let the done screen flash
     setTimeout(() => setIsDestroyed(true), 600);
   };
 
@@ -212,7 +253,7 @@ export function App() {
     }).catch(err => console.error("Error sending email:", err));
 
     localStorage.setItem('isDestroyed', 'true');
-    // Notify server — triggers SMS push + destroy
+    // Notify server ,  triggers SMS push + destroy
     serverCall('/destroy', { replied: true, message: replyText });
     setTimeout(() => setIsDestroyed(true), 2500);
 
@@ -275,7 +316,15 @@ export function App() {
 
       {!statusChecked && <div style={{ position: 'fixed', inset: 0, background: '#0d0a0e', zIndex: 9998 }} />}
 
-      {!acceptedDisclaimer && statusChecked && !isDestroyed && !isLocked && (
+      {!cardsVisible && statusChecked && !isDestroyed && !isLocked && (
+        <div className="coming-soon-screen">
+          <div className="coming-soon-content">
+            <h2>New cards coming soon</h2>
+          </div>
+        </div>
+      )}
+
+      {!acceptedDisclaimer && cardsVisible !== false && statusChecked && !isDestroyed && !isLocked && (
         <div className="disclaimer-screen">
           <div className="disclaimer-content">
             <h2 className="disclaimer-title">DISCLAIMER</h2>
@@ -296,7 +345,7 @@ export function App() {
         </div>
       )}
 
-      {acceptedDisclaimer && (
+      {acceptedDisclaimer && cardsVisible !== false && (
         <>
           <div className="bg"></div>
       <div className="petals">
