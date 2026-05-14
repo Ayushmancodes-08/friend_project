@@ -14,6 +14,7 @@ const CARDS = [
   { label: "Reality Check", desc: "Scroll Up Please", icon: "📱👀" },
   { label: "My Bad", desc: "Self-Reflection", icon: "😅🤦‍♂️" },
   { label: "Farewell", desc: "Adios, Amigo!", icon: "🎩💼" },
+  { label: "The Finale", desc: "Final Act", icon: "🏁✨" },
   { label: "Maun Vrat", desc: "Silent Mode Activated", icon: "🤐🛑" },
   { label: "Response", desc: "Any reply?", icon: "💬" },
 ];

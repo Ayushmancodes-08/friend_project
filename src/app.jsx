@@ -36,7 +36,7 @@ const initialCards = [
     theme: "card-4"
   },
   {
-label: "Farewell",
+    label: "Farewell",
     emoji: "🎩💼",
     title: "Adios, Amigo!",
     body: "Anyway, adios, amigo! Take care of yourself, and best of luck with your incredibly packed schedule and all that 'time' you’re hoarding.<br/><br/>Just one tiny request: don’t give this 'busy' treatment to anyone else, not even your worst enemies, it's a lethal weapon! 😂",
@@ -44,12 +44,20 @@ label: "Farewell",
     theme: "card-5"
   },
   {
-label: "Maun Vrat",
+    label: "The Finale",
+    emoji: "🏁✨",
+    title: "Final Act",
+    body: "Okay, I'll stop the roasting for a second (only a second! 🕰️).<br/><br/>This is the last card. I truly hope all those 'problems' keeping you so busy get solved soon. You deserve some peace, even if you are being a ninja friend right now. 🥷",
+    sig: "Rooting for you (from a distance) 📣",
+    theme: "card-6"
+  },
+  {
+    label: "Maun Vrat",
     emoji: "🤐🛑",
     title: "Silent Mode Activated",
     body: "Oh, and one last thing... I’m officially going on a 'maun vrat' (silent mode). 🤐<br/><br/>I won't be reaching out or texting from now on unless you text or talk to me first. The ball is in your court now! Tata! 👋",
     sig: "Over and out 📻",
-    theme: "card-6"
+    theme: "card-7"
   }
 ];
 
