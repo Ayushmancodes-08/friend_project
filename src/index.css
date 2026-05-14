@@ -361,13 +361,6 @@ body {
     transition: none !important;
 }
 
-/* Dismiss animation */
-.card-wrapper.fly-left {
-    transition: transform 0.5s cubic-bezier(0.55, 0.06, 0.68, 0.19), opacity 0.4s ease !important;
-    transform: translateX(-150vw) rotate(-30deg) !important;
-    opacity: 0;
-}
-
 /* All-done screen */
 .done-screen {
     position: fixed;

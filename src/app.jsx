@@ -77,6 +77,7 @@ export function App() {
   const [isDone, setIsDone] = useState(false);
   const [isDestroyed, setIsDestroyed] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
+  const [vanishingCard, setVanishingCard] = useState(null);
   const [statusChecked, setStatusChecked] = useState(false);
   const [acceptedDisclaimer, setAcceptedDisclaimer] = useState(false);
   const [cardsVisible, setCardsVisible] = useState(true);
@@ -230,9 +231,11 @@ export function App() {
   };
 
   const dismissCard = (nextOverride) => {
-    // Fly left animation
-    setOffsetX(-1000);
+    // Fly left animation replaced with vanishing effect
+    setVanishingCard(current);
+    
     setTimeout(() => {
+      setVanishingCard(null);
       setOffsetX(0);
       setOffsetY(0);
       const next = nextOverride !== undefined ? nextOverride : current + 1;
@@ -243,7 +246,7 @@ export function App() {
         // Notify server which card is now visible
         serverCall('/card', { index: next });
       }
-    }, 250);
+    }, 600); // 600ms to match the CSS animation duration
   };
 
   const handleNoReply = () => {
@@ -300,12 +303,16 @@ export function App() {
     }
 
     if (index === current) {
-
+      const isVanishing = index === vanishingCard;
       return {
-        transform: `translate3d(${offsetX}px, ${offsetY * 0.2}px, 0) rotate(${offsetX * 0.05}deg)`,
-        opacity: 1,
+        transform: isVanishing 
+          ? `translate3d(${offsetX}px, ${offsetY * 0.2}px, 0) rotate(${offsetX * 0.05}deg) scale(1.1)` 
+          : `translate3d(${offsetX}px, ${offsetY * 0.2}px, 0) rotate(${offsetX * 0.05}deg)`,
+        opacity: isVanishing ? 0 : 1,
+        filter: isVanishing ? 'blur(20px) brightness(1.2)' : 'none',
         zIndex: 50,
-        transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease'
+        pointerEvents: isVanishing ? 'none' : 'auto',
+        transition: isDragging ? 'none' : (isVanishing ? 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)' : 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease')
       };
     }
 
