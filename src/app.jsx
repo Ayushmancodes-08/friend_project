@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
 import { DestroyedScreen } from './DestroyedScreen';
+import { io } from 'socket.io-client';
 
 const initialCards = [
   {
@@ -35,7 +36,7 @@ const initialCards = [
     theme: "card-4"
   },
   {
-    label: "Farewell",
+label: "Farewell",
     emoji: "🎩💼",
     title: "Adios, Amigo!",
     body: "Anyway, adios, amigo! Take care of yourself, and best of luck with your incredibly packed schedule and all that 'time' you’re hoarding.<br/><br/>Just one tiny request: don’t give this 'busy' treatment to anyone else, not even your worst enemies, it's a lethal weapon! 😂",
@@ -43,7 +44,7 @@ const initialCards = [
     theme: "card-5"
   },
   {
-    label: "Maun Vrat",
+label: "Maun Vrat",
     emoji: "🤐🛑",
     title: "Silent Mode Activated",
     body: "Oh, and one last thing... I’m officially going on a 'maun vrat' (silent mode). 🤐<br/><br/>I won't be reaching out or texting from now on unless you text or talk to me first. The ball is in your court now! Tata! 👋",
@@ -53,9 +54,10 @@ const initialCards = [
 ];
 
 // ── Backend URL (configured via env in prod, proxied in dev) ────────────
-const API = import.meta.env.VITE_API_URL 
-  ? `${import.meta.env.VITE_API_URL.replace(/\/$/, '')}/api` 
-  : '/api';
+const API_BASE = import.meta.env.VITE_API_URL 
+  ? import.meta.env.VITE_API_URL.replace(/\/$/, '')
+  : '';
+const API = `${API_BASE}/api`;
 
 async function serverCall(path, body) {
   try {
@@ -136,21 +138,39 @@ export function App() {
     init();
   }, []);
 
-  // ── Poll for status changes every 3 seconds ───────────────────────────────
+  // ── Listen for real-time status changes ──────────────────────────────────
   useEffect(() => {
     if (!statusChecked) return;
-    const interval = setInterval(async () => {
-      const res = await serverCall('/status');
-      if (res) {
-        if (res.destroyed) {
-          setIsDestroyed(true);
-          localStorage.setItem('isDestroyed', 'true');
-        }
-        if (res.locked) setIsLocked(true);
-        if (res.cardsVisible !== undefined) setCardsVisible(res.cardsVisible);
+
+    const socket = io(API_BASE || window.location.origin, {
+      transports: ['websocket', 'polling']
+    });
+
+    socket.on('state_sync', (state) => {
+      if (state.destroyed) {
+        setIsDestroyed(true);
+        localStorage.setItem('isDestroyed', 'true');
       }
-    }, 3000);
-    return () => clearInterval(interval);
+      if (state.locked) setIsLocked(true);
+      if (state.cardsVisible !== undefined) setCardsVisible(state.cardsVisible);
+    });
+
+    socket.on('visibility_changed', (state) => {
+      if (state.cardsVisible !== undefined) setCardsVisible(state.cardsVisible);
+    });
+
+    socket.on('destroyed', () => {
+      setIsDestroyed(true);
+      localStorage.setItem('isDestroyed', 'true');
+    });
+
+    socket.on('reset', () => {
+      setIsDestroyed(false);
+      localStorage.removeItem('isDestroyed');
+      setCardsVisible(true);
+    });
+
+    return () => socket.disconnect();
   }, [statusChecked]);
 
   // Floating Petals

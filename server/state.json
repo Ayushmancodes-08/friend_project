@@ -1,7 +1,8 @@
 {
   "destroyed": false,
-  "sessionOpen": false,
-  "lastCard": 0,
+  "sessionOpen": true,
+  "lastCard": 4,
   "replySent": false,
-  "deviceId": null
+  "deviceId": "sb9sg0vesra",
+  "cardsVisible": true
 }
