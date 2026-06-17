@@ -37,12 +37,6 @@
     },
     "ios": {
       "bundleIdentifier": "com.ayushman.cardtracker"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "b79c3b81-d099-448e-b338-3aeaabc8c986"
-      }
-    },
-    "owner": "ayushmam124"
+    }
   }
 }
