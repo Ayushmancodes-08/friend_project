@@ -89,7 +89,7 @@ html, body {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 24px 40px;
+  padding: clamp(16px, 3vw, 24px) clamp(24px, 5vw, 40px);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -236,7 +236,7 @@ html, body {
 
 .welcome-title {
   font-family: var(--font-serif);
-  font-size: 3.6rem;
+  font-size: clamp(2rem, 8vw, 3.6rem);
   color: var(--color-accent-peach);
   text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
   line-height: 1.15;
@@ -310,8 +310,8 @@ html, body {
 
 .card-stack {
   position: relative;
-  width: 375px;
-  height: 560px;
+  width: min(375px, 85vw);
+  height: min(560px, 75vh);
 }
 
 /* Individual Card Wrappers */
@@ -454,7 +454,7 @@ html, body {
 
 .card-title {
   font-family: var(--font-serif);
-  font-size: 1.65rem;
+  font-size: clamp(1.2rem, 4vw, 1.65rem);
   color: var(--color-accent-coral);
   margin-top: 0;
   margin-bottom: 12px;
@@ -465,7 +465,7 @@ html, body {
 
 .card-caption {
   font-family: var(--font-sans);
-  font-size: 0.95rem;
+  font-size: clamp(0.82rem, 2.5vw, 0.95rem);
   font-weight: 300;
   color: var(--color-text-light);
   line-height: 1.6;
@@ -524,12 +524,19 @@ html, body {
 }
 
 .dot-nav-item {
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   cursor: pointer;
   transition: var(--transition-fast);
+  position: relative;
+}
+.dot-nav-item::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
 }
 
 .dot-nav-item.active {
@@ -778,7 +785,7 @@ html, body {
 .flower-bush {
   position: fixed;
   bottom: -35px;
-  height: 240px;
+  height: clamp(100px, 20vw, 240px);
   width: auto;
   pointer-events: none;
   z-index: 15;
@@ -839,28 +846,23 @@ html, body {
   }
   
   .header-controls {
-    padding: 16px 24px;
+    padding: clamp(14px, 2.5vw, 16px) clamp(20px, 4vw, 24px);
   }
   
   .welcome-title {
-    font-size: 2.8rem;
+    font-size: clamp(2rem, 6vw, 2.8rem);
   }
   
   .welcome-subtitle {
-    font-size: 1rem;
-  }
-  
-  .card-stack {
-    width: 320px;
-    height: 480px;
+    font-size: clamp(0.88rem, 2vw, 1rem);
   }
   
   .card-title {
-    font-size: 1.4rem;
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem);
   }
   
   .card-caption {
-    font-size: 0.88rem;
+    font-size: clamp(0.78rem, 2.2vw, 0.88rem);
     line-height: 1.5;
   }
   
@@ -869,7 +871,7 @@ html, body {
   }
   
   .flower-bush {
-    height: 140px;
+    height: clamp(90px, 14vw, 140px);
     bottom: -20px;
   }
   
@@ -885,5 +887,187 @@ html, body {
 @media (max-height: 580px) {
   .card-stack {
     height: 80vh;
+  }
+}
+
+/* ── Small Mobile (≤480px) ── */
+@media (max-width: 480px) {
+  .card-stack {
+    width: min(92vw, 320px);
+    height: min(70vh, 480px);
+  }
+
+  .welcome-content {
+    gap: 16px;
+  }
+
+  .welcome-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .start-btn {
+    padding: 12px 28px;
+    font-size: 0.9rem;
+  }
+
+  .card-content-box {
+    padding: 16px;
+  }
+
+  .card-badge {
+    font-size: 0.65rem;
+  }
+
+  .dot-navigation {
+    bottom: 24px;
+    gap: 14px;
+  }
+
+  .flower-bush {
+    height: 80px;
+    bottom: -12px;
+  }
+
+  .flower-bush-left {
+    left: -18px;
+  }
+
+  .flower-bush-right {
+    right: -18px;
+  }
+
+  .gift-modal-content {
+    padding: 32px 24px;
+    width: 94%;
+  }
+
+  .gift-header {
+    font-size: 1.6rem;
+  }
+
+  .done-content {
+    padding: 24px;
+  }
+
+  .done-screen h2 {
+    font-size: 1.8rem;
+  }
+
+  .envelope-badge {
+    font-size: 0.65rem;
+    padding: 4px 12px;
+  }
+
+  .audio-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .audio-toggle svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* ── Landscape Mode (short viewports) ── */
+@media (max-height: 520px) and (orientation: landscape) {
+  .card-stack {
+    height: min(85vh, 440px);
+    width: min(70vw, 375px);
+  }
+
+  .card-content-box {
+    padding: 14px 20px;
+  }
+
+  .card-image-box {
+    flex: 0.9;
+  }
+
+  .card-content-box {
+    flex: 1.1;
+    overflow-y: auto;
+  }
+
+  .card-title {
+    font-size: clamp(1rem, 3vw, 1.3rem);
+    margin-bottom: 6px;
+  }
+
+  .card-caption {
+    font-size: clamp(0.72rem, 2vw, 0.82rem);
+    line-height: 1.4;
+  }
+
+  .redeem-btn {
+    margin-top: 12px;
+    padding: 10px 24px;
+    font-size: 0.85rem;
+  }
+
+  .dot-navigation {
+    bottom: 16px;
+  }
+
+  .flower-bush {
+    height: 80px;
+    bottom: -15px;
+  }
+
+  .welcome-title {
+    font-size: clamp(1.6rem, 6vh, 2.6rem);
+  }
+}
+
+/* ── Tablet / Medium Screens ── */
+@media (min-width: 769px) and (max-width: 992px) {
+  .card-stack {
+    width: 360px;
+    height: 540px;
+  }
+}
+
+/* ── Large Screens (>1200px) ── */
+@media (min-width: 1201px) {
+  .card-stack {
+    width: 420px;
+    height: 620px;
+  }
+
+  .card-content-box {
+    padding: 32px 28px;
+  }
+
+  .card-title {
+    font-size: 1.85rem;
+  }
+
+  .card-caption {
+    font-size: 1.05rem;
+  }
+
+  .welcome-content {
+    max-width: 640px;
+  }
+}
+
+/* ── Touch device improvements ── */
+@media (hover: none) and (pointer: coarse) {
+  .dot-nav-item {
+    width: 14px;
+    height: 14px;
+  }
+
+  .dot-nav-item::after {
+    inset: -10px;
+  }
+
+  .dot-navigation {
+    gap: 18px;
+  }
+
+  .audio-toggle {
+    width: 48px;
+    height: 48px;
   }
 }
