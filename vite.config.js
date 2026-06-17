@@ -5,6 +5,9 @@ import preact from '@preact/preset-vite'
 export default defineConfig({
   plugins: [preact()],
   server: {
+    watch: {
+      ignored: ['**/phone-app/**', '**/server/**', '**/*.apk']
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:3001',
