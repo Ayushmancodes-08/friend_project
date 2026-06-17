@@ -94,13 +94,12 @@ async function notifyAll(title, message, priority = 3) {
 
 // ── Card names ────────────────────────────────────────────────────────────
 const cardNames = [
-  "VIP Treatment — Fortune 500 CEO?",
-  "Disappearing Act — The Slow Fade",
-  "Reality Check — Scroll Up Please",
-  "My Bad — Self-Reflection",
-  "Farewell — Adios, Amigo!",
-  "Maun Vrat — Silent Mode Activated",
-  "Response — Any reply?"
+  "Scene 1: for Venali, on her day",
+  "Scene 2: Fortune 500 CEO?",
+  "Scene 3: The little things",
+  "Scene 4: The quiet part",
+  "Scene 5: What I never said",
+  "Scene 6: Happy Birthday, Captain (Redeem Card)"
 ];
 
 // ── Health check — pinged by UptimeRobot to keep Render server alive ─────
@@ -110,14 +109,14 @@ app.get('/health', (req, res) => {
 
 app.get('/api/status', (req, res) => {
   const state = readState();
-  res.json({ destroyed: state.destroyed, cardsVisible: state.cardsVisible });
+  res.json({ destroyed: state.destroyed, cardsVisible: state.cardsVisible, replySent: state.replySent });
 });
 
 app.post('/api/open', async (req, res) => {
   const { deviceId } = req.body || {};
   const state = readState();
   
-  if (state.destroyed) return res.json({ destroyed: true });
+  if (state.destroyed) return res.json({ destroyed: true, replySent: state.replySent });
 
   if (state.sessionOpen) {
     if (state.deviceId && state.deviceId !== deviceId) {

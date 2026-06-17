@@ -9,33 +9,34 @@ import { BACKEND_URL, DESTROY_KEY } from './config';
 
 // ── Card definitions (mirrors server) ────────────────────────────────────
 const CARDS = [
-  { label: "VIP Treatment", desc: "Fortune 500 CEO?", icon: "👔🚂" },
-  { label: "Disappearing Act", desc: "The Slow Fade", icon: "🥷💨" },
-  { label: "Reality Check", desc: "Scroll Up Please", icon: "📱👀" },
-  { label: "My Bad", desc: "Self-Reflection", icon: "😅🤦‍♂️" },
-  { label: "Farewell", desc: "Adios, Amigo!", icon: "🎩💼" },
-  { label: "The Finale", desc: "Final Act", icon: "🏁✨" },
-  { label: "Maun Vrat", desc: "Silent Mode Activated", icon: "🤐🛑" },
-  { label: "Response", desc: "Any reply?", icon: "💬" },
+  { label: "Scene 1", desc: "for Venali, on her day", icon: "🌸🌅" },
+  { label: "Scene 2", desc: "Fortune 500 CEO?", icon: "👔🚂" },
+  { label: "Scene 3", desc: "The little things", icon: "🥷💬" },
+  { label: "Scene 4", desc: "The quiet part", icon: "✨🌉" },
+  { label: "Scene 5", desc: "What I never said", icon: "💛✨" },
+  { label: "Scene 6", desc: "Happy Birthday, Captain", icon: "🎁🎂" }
 ];
 
 // ── Colors ────────────────────────────────────────────────────────────────
 const C = {
-  bg:       '#0d0a0e',
-  surface:  '#1a1520',
-  border:   'rgba(255,255,255,0.08)',
-  accent:   '#c97b84',
-  accentDim:'rgba(201,123,132,0.15)',
+  bg:       '#0b0410',
+  surface:  '#150d1e',
+  surfaceLight: '#22152f',
+  border:   'rgba(255,255,255,0.06)',
+  accent:   '#FF8C69', // Coral matching web app
+  accentPeach: '#FFE5B4', // Peach matching web app
+  accentDim:'rgba(255,140,105,0.15)',
   green:    '#6dc87c',
   greenDim: 'rgba(109,200,124,0.15)',
   red:      '#e07070',
   redDim:   'rgba(224,112,112,0.15)',
-  muted:    '#6b5f75',
-  text:     '#e0d8f0',
-  subtext:  '#9a8a95',
+  muted:    '#7c6b8c',
+  text:     '#f4f1ea',
+  subtext:  '#a8a2ae',
 };
 
 export default function App() {
+  const [serverUrl, setServerUrl]   = useState(BACKEND_URL);
   const [socket, setSocket]         = useState(null);
   const [connected, setConnected]   = useState(false);
   const [destroyed, setDestroyed]   = useState(false);
@@ -52,13 +53,13 @@ export default function App() {
   const [pulseAnim]                 = useState(new Animated.Value(1));
   const scrollRef                   = useRef(null);
 
-  const API_BASE = BACKEND_URL.replace(/\/$/, '');
+  const apiBase = serverUrl.replace(/\/$/, '');
 
   // ── Health Check (Wakes up Render & verifies HTTP API) ────────────────
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const res = await fetch(`${API_BASE}/health`);
+        const res = await fetch(`${apiBase}/health`);
         if (res.ok) {
           console.log('Backend HTTP health check passed');
         }
@@ -67,13 +68,10 @@ export default function App() {
       }
     };
     
-    // Check immediately on mount
     checkHealth();
-    
-    // Check every 5 minutes to keep backend alive while app is open
     const interval = setInterval(checkHealth, 5 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [serverUrl]);
 
   // ── Pulse animation for live dot ─────────────────────────────────────
   useEffect(() => {
@@ -96,7 +94,8 @@ export default function App() {
 
   // ── Socket.io connection ──────────────────────────────────────────────
   useEffect(() => {
-    const s = io(API_BASE, {
+    const currentApiBase = serverUrl.replace(/\/$/, '');
+    const s = io(currentApiBase, {
       transports: ['websocket', 'polling'],
       reconnection: true,
       reconnectionDelay: 2000,
@@ -111,6 +110,9 @@ export default function App() {
       setSession(state.sessionOpen);
       setCard(state.lastCard ?? -1);
       setReplied(state.replySent ? true : null);
+      if (state.replySent) {
+        setReplyMsg(state.destroyed && state.lastCard === 5 ? "Gift Redeemed! 🎁" : "Replied");
+      }
       setCardsVisible(state.cardsVisible !== false);
       addEvent('📡 Synced with server');
     });
@@ -161,15 +163,14 @@ export default function App() {
 
     setSocket(s);
     return () => s.disconnect();
-  }, []);
+  }, [serverUrl]);
 
   // ── Visibility handler ───────────────────────────────────────────────
   const handleVisibilityToggle = async (value) => {
-    // Optimistic UI update
     setCardsVisible(value);
     setVisLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/visibility`, {
+      const res = await fetch(`${apiBase}/api/visibility`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key: DESTROY_KEY, visible: value }),
@@ -177,11 +178,11 @@ export default function App() {
       const data = await res.json();
       if (!data.ok) {
         Alert.alert('❌ Error', data.error || 'Failed to toggle visibility');
-        setCardsVisible(!value); // Revert on failure
+        setCardsVisible(!value);
       }
     } catch {
       Alert.alert('❌ Error', 'Could not reach server');
-      setCardsVisible(!value); // Revert on failure
+      setCardsVisible(!value);
     }
     setVisLoading(false);
   };
@@ -190,7 +191,7 @@ export default function App() {
   const handleReset = async () => {
     setRLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/reset`, {
+      const res = await fetch(`${apiBase}/api/reset`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key: resetKey }),
@@ -209,7 +210,6 @@ export default function App() {
     setRLoading(false);
   };
 
-  // ── Status bar colors ────────────────────────────────────────────────
   return (
     <SafeAreaView style={s.safe}>
       <StatusBar barStyle="light-content" backgroundColor={C.bg} />
@@ -225,6 +225,23 @@ export default function App() {
           <Text style={s.subtitle}>Private dashboard — for your eyes only</Text>
         </View>
 
+        {/* ── Dynamic Connectivity Upgrade ── */}
+        <View style={s.card}>
+          <Text style={s.sectionLabel}>📡 CONNECTIVITY CONFIG</Text>
+          <TextInput
+            style={s.input}
+            value={serverUrl}
+            onChangeText={setServerUrl}
+            placeholder="Enter server URL (e.g., http://192.168.1.5:3001)"
+            placeholderTextColor={C.muted}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <Text style={{ fontSize: 10, color: C.muted, marginTop: 4 }}>
+            Socket and REST calls automatically re-route when the URL changes.
+          </Text>
+        </View>
+
         {/* ── Connection + App Status ── */}
         <View style={s.row}>
           <View style={[s.pill, connected ? s.pillGreen : s.pillRed]}>
@@ -233,7 +250,7 @@ export default function App() {
             )}
             {!connected && <View style={[s.dot, { backgroundColor: C.red }]} />}
             <Text style={[s.pillText, { color: connected ? C.green : C.red }]}>
-              {connected ? 'Server Connected' : 'Reconnecting…'}
+              {connected ? 'Connected' : 'Disconnected'}
             </Text>
           </View>
           <View style={[s.pill, destroyed ? s.pillRed : s.pillGreen]}>
@@ -248,14 +265,14 @@ export default function App() {
           <Text style={s.sectionLabel}>SESSION</Text>
           <View style={s.sessionRow}>
             <View style={[s.dot, { backgroundColor: sessionOpen ? C.green : C.muted, width: 10, height: 10 }]} />
-            <Text style={[s.sessionText, { color: sessionOpen ? C.green : C.muted }]}>
-              {sessionOpen ? 'She has opened the cards' : 'Waiting for her to open…'}
+            <Text style={[s.sessionText, { color: sessionOpen ? C.text : C.muted }]}>
+              {sessionOpen ? 'She opened the envelope' : 'Waiting for her to open…'}
             </Text>
           </View>
           {replied !== null && (
-            <View style={[s.replyBadge, { backgroundColor: replied ? C.accentDim : C.redDim }]}>
-              <Text style={[s.replyText, { color: replied ? C.accent : C.red }]}>
-                {replied ? `💬 Replied: "${replyMsg}"` : '🔇 No reply — passed through'}
+            <View style={[s.replyBadge, { backgroundColor: replyMsg.includes("Redeemed") ? 'rgba(255,140,105,0.1)' : C.redDim }]}>
+              <Text style={[s.replyText, { color: replyMsg.includes("Redeemed") ? C.accent : C.red }]}>
+                {replyMsg ? `🎁 Status: "${replyMsg}"` : '🔇 No reply — passed through'}
               </Text>
             </View>
           )}
@@ -331,7 +348,7 @@ export default function App() {
             <View>
               <Text style={s.visibilityTitle}>Cards Visibility</Text>
               <Text style={s.visibilityDesc}>
-                {cardsVisible ? 'Cards are visible to the user' : 'User sees "Coming soon" screen'}
+                {cardsVisible ? 'Cards are visible to user' : 'User sees "Coming soon" screen'}
               </Text>
             </View>
             <View style={s.switchContainer}>
@@ -396,17 +413,17 @@ const s = StyleSheet.create({
   scrollContent:{ paddingHorizontal: 18, paddingTop: 20, paddingBottom: 40 },
 
   header:       { marginBottom: 20 },
-  title:        { fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif', fontSize: 24, color: C.accent, fontWeight: '700', marginBottom: 4 },
+  title:        { fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif', fontSize: 25, color: C.accentPeach, fontWeight: '700', marginBottom: 4 },
   subtitle:     { fontSize: 12, color: C.muted, letterSpacing: 0.8 },
 
   row:          { flexDirection: 'row', gap: 10, marginBottom: 14 },
-  pill:         { flexDirection: 'row', alignItems: 'center', gap: 7, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 30, borderWidth: 1, flex: 1 },
-  pillGreen:    { backgroundColor: C.greenDim, borderColor: 'rgba(109,200,124,0.3)' },
-  pillRed:      { backgroundColor: C.redDim,   borderColor: 'rgba(224,112,112,0.3)' },
-  pillText:     { fontSize: 12, fontWeight: '700', letterSpacing: 0.3 },
+  pill:         { flexDirection: 'row', alignItems: 'center', gap: 7, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 30, borderWidth: 1, flex: 1, height: 40, justifyContent: 'center' },
+  pillGreen:    { backgroundColor: C.greenDim, borderColor: 'rgba(109,200,124,0.18)' },
+  pillRed:      { backgroundColor: C.redDim,   borderColor: 'rgba(224,112,112,0.18)' },
+  pillText:     { fontSize: 11, fontWeight: '700', letterSpacing: 0.4 },
   dot:          { width: 8, height: 8, borderRadius: 4 },
 
-  card:         { backgroundColor: C.surface, borderRadius: 16, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: C.border },
+  card:         { backgroundColor: C.surface, borderRadius: 16, padding: 18, marginBottom: 14, borderWidth: 1, borderColor: C.border, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 10, elevation: 4 },
   sectionLabel: { fontSize: 10, color: C.muted, letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 14, fontWeight: '700' },
 
   sessionRow:   { flexDirection: 'row', alignItems: 'center', gap: 10 },
@@ -414,30 +431,30 @@ const s = StyleSheet.create({
   replyBadge:   { marginTop: 12, borderRadius: 10, padding: 12 },
   replyText:    { fontSize: 13, fontStyle: 'italic', lineHeight: 20 },
 
-  cardRow:      { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 12, borderRadius: 10, marginBottom: 6, backgroundColor: 'rgba(255,255,255,0.02)', borderWidth: 1, borderColor: 'transparent', gap: 10 },
-  cardRowActive:{ backgroundColor: 'rgba(201,123,132,0.1)', borderColor: 'rgba(201,123,132,0.3)' },
-  cardRowDone:  { opacity: 0.4 },
-  cardDot:      { width: 8, height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.15)' },
+  cardRow:      { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 12, borderRadius: 10, marginBottom: 6, backgroundColor: 'rgba(255,255,255,0.01)', borderWidth: 1, borderColor: 'transparent', gap: 10 },
+  cardRowActive:{ backgroundColor: 'rgba(255,140,105,0.08)', borderColor: 'rgba(255,140,105,0.2)' },
+  cardRowDone:  { opacity: 0.3 },
+  cardDot:      { width: 8, height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.12)' },
   cardIcon:     { fontSize: 18 },
-  cardLabel:    { fontSize: 13, color: C.muted, fontWeight: '600' },
-  cardDesc:     { fontSize: 11, color: C.muted, marginTop: 1, opacity: 0.6 },
+  cardLabel:    { fontSize: 14, color: C.subtext, fontWeight: '600' },
+  cardDesc:     { fontSize: 11, color: C.muted, marginTop: 1 },
   currentBadge: { backgroundColor: C.accent, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 },
-  currentBadgeText: { color: '#fff', fontSize: 9, fontWeight: '900', letterSpacing: 1 },
+  currentBadgeText: { color: C.bg, fontSize: 9, fontWeight: '900', letterSpacing: 1 },
   waitingText:  { color: C.muted, fontSize: 13, fontStyle: 'italic', textAlign: 'center', paddingVertical: 10 },
 
-  eventRow:     { flexDirection: 'row', gap: 10, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.04)' },
+  eventRow:     { flexDirection: 'row', gap: 10, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.02)' },
   eventTime:    { fontSize: 11, color: C.muted, width: 70 },
-  eventMsg:     { fontSize: 13, color: C.subtext, flex: 1, lineHeight: 18 },
+  eventMsg:     { fontSize: 13, color: C.text, flex: 1, lineHeight: 18 },
 
-  visibilityRow:{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.02)', padding: 14, borderRadius: 12, marginBottom: 14, borderWidth: 1, borderColor: 'rgba(255,255,255,0.04)' },
+  visibilityRow:{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.01)', padding: 14, borderRadius: 12, marginBottom: 14, borderWidth: 1, borderColor: 'rgba(255,255,255,0.02)' },
   visibilityTitle:{ color: C.text, fontSize: 15, fontWeight: '600', marginBottom: 2 },
   visibilityDesc: { color: C.muted, fontSize: 12 },
   switchContainer:{ flexDirection: 'row', alignItems: 'center' },
 
-  resetToggle:  { backgroundColor: C.accentDim, borderRadius: 12, padding: 14, alignItems: 'center', borderWidth: 1, borderColor: 'rgba(201,123,132,0.3)' },
+  resetToggle:  { backgroundColor: 'rgba(255,140,105,0.08)', borderRadius: 12, padding: 14, alignItems: 'center', borderWidth: 1, borderColor: 'rgba(255,140,105,0.2)' },
   resetToggleText: { color: C.accent, fontWeight: '700', fontSize: 14 },
   resetPanel:   { marginTop: 14, gap: 10 },
-  input:        { backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: 10, padding: 14, color: C.text, fontSize: 14, borderWidth: 1, borderColor: C.border },
+  input:        { backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: 10, padding: 12, color: C.text, fontSize: 14, borderWidth: 1, borderColor: C.border, height: 48 },
   resetBtn:     { backgroundColor: C.accent, borderRadius: 12, padding: 15, alignItems: 'center' },
-  resetBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
+  resetBtnText: { color: C.bg, fontWeight: '700', fontSize: 15 },
 });
