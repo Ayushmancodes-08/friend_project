@@ -94,12 +94,12 @@ async function notifyAll(title, message, priority = 3) {
 
 // ── Card names ────────────────────────────────────────────────────────────
 const cardNames = [
-  "Scene 1: for Venali, on her day",
-  "Scene 2: Fortune 500 CEO?",
-  "Scene 3: The little things",
-  "Scene 4: The quiet part",
-  "Scene 5: What I never said",
-  "Scene 6: Happy Birthday, Captain (Redeem Card)"
+  "Scene 1: A quiet Ghibli meadow",
+  "Scene 2: The Flying Airship",
+  "Scene 3: Our little soot sprites",
+  "Scene 4: A quiet train ride",
+  "Scene 5: A warm cup of tea",
+  "Scene 6: Happy Birthday, Captain! (Redeem Card)"
 ];
 
 // ── Health check — pinged by UptimeRobot to keep Render server alive ─────

@@ -9,12 +9,12 @@ import { BACKEND_URL, DESTROY_KEY } from './config';
 
 // ── Card definitions (mirrors server) ────────────────────────────────────
 const CARDS = [
-  { label: "Scene 1", desc: "for Venali, on her day", icon: "🌸🌅" },
-  { label: "Scene 2", desc: "Fortune 500 CEO?", icon: "👔🚂" },
-  { label: "Scene 3", desc: "The little things", icon: "🥷💬" },
-  { label: "Scene 4", desc: "The quiet part", icon: "✨🌉" },
-  { label: "Scene 5", desc: "What I never said", icon: "💛✨" },
-  { label: "Scene 6", desc: "Happy Birthday, Captain", icon: "🎁🎂" }
+  { label: "Scene 1", desc: "A quiet Ghibli meadow", icon: "🌸🌿" },
+  { label: "Scene 2", desc: "The Flying Airship", icon: "✈️☁️" },
+  { label: "Scene 3", desc: "Our little soot sprites", icon: "✨🐜" },
+  { label: "Scene 4", desc: "A quiet train ride", icon: "🚂🌊" },
+  { label: "Scene 5", desc: "A warm cup of tea", icon: "🍵🏡" },
+  { label: "Scene 6", desc: "Happy Birthday, Captain!", icon: "🎁🎂" }
 ];
 
 // ── Colors ────────────────────────────────────────────────────────────────
